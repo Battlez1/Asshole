@@ -11,7 +11,7 @@
 <meta name="apple-mobile-web-app-title" content="TGAA Asshole">
 
 <!-- iOS Home Screen Icon (uncomment and set path if you have an icon file) -->
-<!-- <link rel="apple-touch-icon" href="icon.png"> -->
+<link rel="apple-touch-icon" href="AssholeIcon.png">
 
 <title>TGAA ASSHOLE</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Young+Serif&display=swap">
@@ -29,12 +29,12 @@ body{
   font-family:"DM Sans",system-ui,sans-serif;
   line-height:1.45;
 
-  /* Prevent screen bouncing/overscroll & accidental text selection */
-  overscroll-behavior:none;
-  overflow:hidden;
-  -webkit-user-select:none;
-  user-select:none;
-  -webkit-touch-callout:none;
+  /* scroll */
+  overflow: auto;
+  overscroll-behavior: contain;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
 }
 main{max-width:980px;margin:0 auto;padding:14px 12px 28px}
 h1{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:clamp(24px,5vw,34px);margin:2px 0}
