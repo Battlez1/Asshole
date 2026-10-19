@@ -8,11 +8,12 @@
 <!-- Enables full-screen standalone app mode on iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="TGAA Asshole">
+<meta name="apple-mobile-web-app-title" content="Nickel Knock">
 
-<!-- iOS Home Screen Icon (uncomment and set path if you have an icon file) -->
-<link rel="apple-touch-icon" href="AssholeIcon.png">
-
+<!-- Custom Home Screen Logo (replace icon.png with your image filename) -->
+<link rel="apple-touch-icon" href="AssholeIcon.jpg">
+  
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>TGAA ASSHOLE</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Young+Serif&display=swap">
 <style>
@@ -20,22 +21,9 @@
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#0b1110;--ink:#ebe5d4;--muted:#93a09b}}
 :root[data-theme="dark"]{--page:#0b1110;--ink:#ebe5d4;--muted:#93a09b}
-*,*::before,*::after{box-sizing:inherit;touch-action:manipulation}
+*,*::before,*::after{box-sizing:inherit}
 [hidden]{display:none!important}
-body{
-  margin:0;
-  background:var(--page);
-  color:var(--ink);
-  font-family:"DM Sans",system-ui,sans-serif;
-  line-height:1.45;
-
-  /* scroll */
-  overflow: auto;
-  overscroll-behavior: contain;
-  -webkit-user-select: none;
-  user-select: none;
-  -webkit-touch-callout: none;
-}
+body{margin:0;background:var(--page);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;line-height:1.45}
 main{max-width:980px;margin:0 auto;padding:14px 12px 28px}
 h1{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:clamp(24px,5vw,34px);margin:2px 0}
 .panel,.table{position:relative;background:radial-gradient(ellipse at center,var(--felt) 0%,var(--felt2) 100%);border:6px solid #2b1d12;border-radius:28px;box-shadow:0 0 0 2px var(--brass) inset;padding:16px 12px;color:var(--ivory)}
@@ -77,10 +65,13 @@ input[type=range]{width:100%;accent-color:var(--brass)}
 .pz h2{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:40px;margin:0}
 :root{--t:1}body.fast{--t:.35}
 .table{padding-top:16px}
-.tools{position:absolute;bottom:14px;right:16px;z-index:2}
+.tools{position:absolute;bottom:14px;right:16px;z-index:2;display:flex;gap:8px}
 .tool{padding:0;min-height:0;background:none;border-radius:9px;line-height:0}
 .tool svg rect{fill:#041c1a}.tool svg path{fill:#1d5d57}
 #fst[aria-pressed=true] svg path{fill:var(--brass)}
+.tool svg path.w{fill:none;stroke:#1d5d57;stroke-width:2;stroke-linecap:round}
+#fs .fx{display:none}#fs[aria-pressed=true] .fx{display:inline}#fs[aria-pressed=true] .fe{display:none}
+#fs[aria-pressed=true] svg path.w{stroke:var(--brass)}
 .pl{transition:opacity .35s,border-color .25s,background .25s}
 .lp{border-radius:12px}
 .card.c3{color:#1a6bff}
@@ -123,6 +114,11 @@ button:focus-visible,input:focus-visible{outline:3px solid #fff;outline-offset:2
 dialog{max-width:min(580px,92vw);max-height:86vh;border:6px solid #2b1d12;border-radius:24px;background:var(--felt2);color:var(--ivory);padding:20px 22px;box-shadow:0 0 0 2px var(--brass) inset}
 dialog::backdrop{background:rgba(0,0,0,.65)}dialog h2{font-family:"Young Serif",Georgia,serif;font-weight:400;margin:0 0 8px}
 dialog h3{margin:12px 0 4px;font-size:16px;color:var(--brass)}dialog li,dialog p{font-size:15px;margin:3px 0}dialog ul,dialog ol{padding-left:20px;margin:4px 0}
+.badge.low{border-color:var(--red);color:var(--red)}
+dialog .f{margin:10px 0}
+.tw{overflow-x:auto}
+table{border-collapse:collapse;width:100%}
+td,th{padding:4px 8px;text-align:left;border-bottom:1px solid rgba(201,162,75,.3)}
 </style>
 </head>
 <body>
@@ -145,16 +141,20 @@ dialog h3{margin:12px 0 4px;font-size:16px;color:var(--brass)}dialog li,dialog p
     <div class="f" id="hbox" hidden><label for="hp">Human players <output id="hpo">2</output></label><input type="range" id="hp" min="2" max="8" value="2"></div>
     <div class="f"><label class="chk"><input type="checkbox" id="jk" checked> Use Jokers</label><p class="hint">Turn off to play with a 52-card deck.</p></div>
     <div class="f"><label class="chk"><input type="checkbox" id="tr"> Allow triple stack</label><p class="hint">Lets a player place three cards of the same rank at once. Jokers still go one at a time.</p></div>
+    <div class="f"><label class="chk"><input type="checkbox" id="tm" autocomplete="off"> Tournament mode</label>
+      <p class="hint">Play a set number of games. Finishing positions earn placement points, and the highest total wins.</p></div>
+    <div class="f" id="tbox" hidden><label for="tg">Games in the tournament <output id="tgo">5</output></label><input type="range" id="tg" min="2" max="30" value="5"></div>
+    <div class="f"><button class="alt" id="funb" type="button">Fun mode...</button><p class="hint" id="funsum">Off. Open it for multi-deck games, huge tables and a speed clock.</p></div>
     <p class="hint" id="sum" style="text-align:center"></p>
     <div class="ctl" style="margin:0"><button class="alt" id="back">Back</button><button id="begin">Start game</button></div>
   </div>
 </section>
 
 <section id="game" hidden>
-  <div class="gh"><h1>TGAA ASSHOLE</h1><span class="badge">Official TGAA ruleset</span>
-    <span class="gb"><button class="sch" aria-label="Toggle school-friendly wording (Scum)" aria-pressed="false" title="School-friendly mode"></button><button class="alt sm" id="pb">Pause</button><button class="alt sm" id="snd" aria-label="Mute sound" title="Sound">Sound: on</button><button class="alt sm" id="rl">Rules</button><button class="alt sm" id="ng">New game</button><button class="alt sm" id="su">Setup</button></span></div>
+  <div class="gh"><h1>TGAA ASSHOLE</h1><span class="badge">Official TGAA ruleset</span><span class="badge" id="sp" hidden></span>
+    <span class="gb"><button class="sch" aria-label="Toggle school-friendly wording (Scum)" aria-pressed="false" title="School-friendly mode"></button><button class="alt sm" id="pb">Pause</button><button class="alt sm" id="snd" aria-label="Mute sound" title="Sound">Sound: on</button><button class="alt sm" id="st" hidden>Standings</button><button class="alt sm" id="rl">Rules</button><button class="alt sm" id="ng">New game</button><button class="alt sm" id="su">Setup</button></span></div>
   <div class="table">
-    <div class="tools"><button class="tool" id="fst" aria-label="Fast mode" aria-pressed="false" title="Fast mode off"><svg viewBox="0 0 44 28" width="44" height="28" aria-hidden="true"><rect width="44" height="28" rx="9"/><path d="M12 8l9 6-9 6zM22 8l9 6-9 6z"/></svg></button></div>
+    <div class="tools"><button class="tool" id="fs" aria-label="Full screen" aria-pressed="false" title="Full screen"><svg viewBox="0 0 44 28" width="44" height="28" aria-hidden="true"><rect width="44" height="28" rx="9"/><path class="w fe" d="M13 12V8h4M31 12V8h-4M13 16v4h4M31 16v4h-4"/><path class="w fx" d="M17 8v4h-4M27 8v4h4M17 20v-4h-4M27 20v-4h4"/></svg></button><button class="tool" id="fst" aria-label="Fast mode" aria-pressed="false" title="Fast mode off"><svg viewBox="0 0 44 28" width="44" height="28" aria-hidden="true"><rect width="44" height="28" rx="9"/><path d="M12 8l9 6-9 6zM22 8l9 6-9 6z"/></svg></button></div>
     <div class="players" id="pl"></div>
     <div class="mid"><div class="info2" id="info2"></div><div class="pile" id="pile"></div><div class="msg" id="msg" aria-live="polite"></div><div class="timer" id="timer" role="timer" hidden></div></div>
     <div class="hl" id="hl"></div><div class="hand" id="hand"></div>
@@ -166,6 +166,18 @@ dialog h3{margin:12px 0 4px;font-size:16px;color:var(--brass)}dialog li,dialog p
 </section>
 
 <div class="pz" id="pz" role="dialog" aria-label="Game paused" hidden><h2>Paused</h2><div class="ctl" style="margin:0"><button id="rs">Resume</button><button class="alt" id="pq">Change setup</button></div></div>
+<dialog id="fun" aria-labelledby="ft">
+  <h2 id="ft">Fun mode</h2>
+  <p>Extra options that are silly or too unbalanced for a real game. All are off by default.</p>
+  <div class="f"><label for="fd">Decks <output id="fdo">1</output></label><input type="range" id="fd" min="1" max="10" value="1"><p class="hint" id="fdh"></p></div>
+  <div class="f"><label class="chk"><input type="checkbox" id="fb" autocomplete="off"> Big game</label><p class="hint" id="fbh"></p></div>
+  <div class="f"><label class="chk"><input type="checkbox" id="fsp" autocomplete="off"> Speedshole</label><p class="hint">The game has a clock. When time runs out, finished players keep their places and everyone else is ranked by fewest cards left.</p></div>
+  <div class="f" id="fmbox" hidden><label for="fm">Time limit <output id="fmo">4</output> minutes</label><input type="range" id="fm" min="1" max="10" value="4"><p class="hint">3 to 5 minutes works well.</p></div>
+  <div class="f"><label for="fj">Jokers per deck <output id="fjo">2</output></label><input type="range" id="fj" min="1" max="10" value="2"><p class="hint">Only used when Jokers are on.</p></div>
+  <div class="f"><label for="fx">Most cards in one play <output id="fxo">2</output></label><input type="range" id="fx" min="2" max="8" value="2"><p class="hint">Jokers always go one at a time. The triple stack option makes this at least 3.</p></div>
+  <div class="ctl"><button class="alt" id="fr">Reset all</button><button id="fc">Done</button></div>
+</dialog>
+<dialog id="stand" aria-labelledby="stt"><h2 id="stt">Tournament standings</h2><div id="stbody"></div><div class="ctl"><button id="stc">Close</button></div></dialog>
 <dialog id="rules" aria-labelledby="rt">
   <h2 id="rt">TGAA Asshole rules</h2>
   <p>Get rid of all your cards. Finishing order decides each player's title: President, Vice President, Board, Vice Asshole, Asshole. The last player holding cards is the Asshole.</p>
@@ -178,6 +190,10 @@ dialog h3{margin:12px 0 4px;font-size:16px;color:var(--brass)}dialog li,dialog p
     <li>A 2 goes on anything, resets the pile and gives another turn. Two 2s may be played together, but only one extra turn is earned.</li>
     <li>If you cannot play, you automatically draw one card and lose your turn. If everyone draws, a card is flipped from the draw pile onto the pile. A flipped 2 or Joker has no effect.</li>
   </ul>
+  <h3>Tournament mode</h3>
+  <p>Play a set number of games (2 to 30). After each game, players earn placement points: President 5, Vice President 3, Board 1, Vice Asshole 0, Asshole -1. The highest total wins. The Standings button shows everyone's points at any time.</p>
+  <h3>Fun mode</h3>
+  <p>Optional extras that are silly or unbalanced: several decks (a longer stack of matching cards is needed to reset the pile), huge tables, Speedshole with a game clock, extra Jokers, and bigger plays.</p>
   <h3>Turn timer</h3>
   <p>You have 30 seconds on each of your turns. If time runs out it is a Floor Violation and your turn is skipped. The opening 3♣ play has no timer.</p>
   <h3>Jokers</h3>
@@ -189,7 +205,7 @@ dialog h3{margin:12px 0 4px;font-size:16px;color:var(--brass)}dialog li,dialog p
 /* ===== GAME ENGINE (no DOM access) ===== */
 const RN={11:'J',12:'Q',13:'K',14:'A',15:'2',16:'Joker'},rn=r=>RN[r]||r,SU='♠♥♦♣';
 let cid=0;
-const mkDeck=j=>{const d=[];for(const s of SU)for(let r=3;r<=15;r++)d.push({r,s,id:cid++});if(j)d.push({r:16,s:'★',id:cid++},{r:16,s:'★',id:cid++});return d};
+const mkDeck=o=>{const d=[];for(let k=0;k<o.decks;k++){for(const s of SU)for(let r=3;r<=15;r++)d.push({r,s,id:cid++});if(o.jokers)for(let i=0;i<o.jpd;i++)d.push({r:16,s:'★',id:cid++})}return d};
 const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const cn=c=>c.r===16?'Joker':rn(c.r)+c.s;
 const TT=n=>n===2?['President','Asshole']:n===3?['President','Vice President','Asshole']:['President','Vice President',...Array(n-4).fill('Board'),'Vice Asshole','Asshole'];
@@ -197,18 +213,18 @@ const alive=G=>G.P.filter(p=>!p.done).length;
 const V=(p,a,b)=>p.name==='You'?b:a;
 const nx=(G,i)=>{let j=i;do j=(j+G.dir+G.n)%G.n;while(G.P[j].done&&j!==i);return j};
 function deal(P,opt){
- const d=shuf(mkDeck(opt.jokers)),n=P.length,s=Math.random()*n|0;
+ const d=shuf(mkDeck(opt)),n=P.length,s=Math.random()*n|0;
  P.forEach(p=>{p.hand=[];p.done=false;p.skip=false;p.title=''});
  d.forEach((c,k)=>P[(s+k)%n].hand.push(c));
  P.forEach(p=>p.hand.sort((a,b)=>a.r-b.r||SU.indexOf(a.s)-SU.indexOf(b.s)));
  return{P,n,turn:P.findIndex(p=>p.hand.some(c=>c.r===3&&c.s==='♣')),dir:1,top:null,run:{r:0,c:0},used:[],draw:[],hasDraw:false,last:-1,passes:0,skipN:0,order:[],first:true,over:null,pend:null,q:[],lp:[],opt,lastJ:-1,src:-1,disc:null,vio:0};
 }
 function check(G,cs){
- const mx=G.opt.triple?3:2;
- if(!cs.length||cs.length>mx)return mx===3?'Select one to three cards.':'Select one or two cards.';
+ const mx=G.opt.max;
+ if(!cs.length||cs.length>mx)return mx===2?'Select one or two cards.':`Select one to ${mx} cards.`;
  if(cs.length>1&&cs.some(c=>c.r===16))return'A Joker must be played alone.';
  if(cs[0].r===16&&G.lastJ===G.turn)return'Only one Joker can be played per turn.';
- if(cs.some(c=>c.r!==cs[0].r))return'Two cards must have the same rank.';
+ if(cs.some(c=>c.r!==cs[0].r))return'All selected cards must have the same rank.';
  if(G.first)return(cs.length===1&&cs[0].r===3&&cs[0].s==='♣')?null:'The opening play must be the 3♣ alone.';
  const r=cs[0].r;if(r>=15||G.top===null)return null;
  return r>=G.top?null:`${rn(r)} is too low. Play ${rn(G.top)} or higher, a 2, or a Joker.`;
@@ -260,7 +276,7 @@ function play(G,i,cs,eff){
  if(G.first){G.first=false;op=1;G.q.push('The 3♣ opens the game: extra turn, play anything.')}
  else if(r===15)G.q.push('A 2 resets the pile: extra turn.');
  else if(r===16)G.q.push('Joker: pile reset and extra turn.');
- else{G.run=(G.run.r===r&&G.run.c>0&&(G.top===r||G.top===null))?{r,c:G.run.c+cs.length}:{r,c:cs.length};G.top=r;sp=G.run.c>=3?1:0;if(sp)G.q.push(`Three ${rn(r)}s stacked: pile reset, extra turn.`)}
+ else{G.run=(G.run.r===r&&G.run.c>0&&(G.top===r||G.top===null))?{r,c:G.run.c+cs.length}:{r,c:cs.length};G.top=r;sp=G.run.c>=G.opt.th?1:0;if(sp)G.q.push(`${G.opt.th===3?'Three':G.opt.th} ${rn(r)}s stacked: pile reset, extra turn.`)}
  if(sp){G.top=null;G.run=op?{r:3,c:1}:{r:0,c:0}}
  if(!p.hand.length)finish(G,i);
  if(r===16&&!G.over){
@@ -290,18 +306,26 @@ function resolve(G,blk){
  let k=nx(G,from);if(k===to)k=nx(G,to);G.turn=k;
 }
 
+function endByTime(G){
+ const rest=G.P.map((p,i)=>i).filter(i=>!G.P[i].done).sort((a,b)=>G.P[a].hand.length-G.P[b].hand.length);
+ rest.forEach(i=>G.order.push(i));G.over='time';
+ G.order.forEach((ix,k)=>G.P[ix].title=TT(G.n)[k]);
+ G.q.push('Time is up! Finished players keep their places and everyone else is ranked by fewest cards left.');
+}
+
 /* ===== BOTS ===== */
 function botEff(G,i){
  const al=G.P.map((p,k)=>k).filter(k=>k!==i&&!G.P[k].done),many=alive(G)>2,x=Math.random();
  const lead=al.slice().sort((a,b)=>G.P[a].hand.length-G.P[b].hand.length)[0];
- if(x<.35)return{t:'d2',target:lead};if(x<.55)return{t:'d4',target:lead};
- if(many&&x<.7)return{t:'skip'};if(many&&x<.8)return{t:'rev'};return{t:'none'};
+ // making other players draw is the strongest Joker play, so bots do it about 80% of the time
+ if(x<.4)return{t:'d2',target:lead};if(x<.8)return{t:'d4'};
+ if(many&&x<.88)return{t:'skip'};if(many&&x<.94)return{t:'rev'};return{t:'none'};
 }
 function botPlay(G,i){
  const h=G.P[i].hand;
  if(G.first)return{cs:[h.find(c=>c.r===3&&c.s==='♣')],eff:{t:'none'}};
  const ok=h.filter(c=>!check(G,[c])),nr=ok.filter(c=>c.r<15);
- if(nr.length){const r=Math.min(...nr.map(c=>c.r));return{cs:h.filter(c=>c.r===r).slice(0,G.opt.triple?3:2),eff:{t:'none'}}}
+ if(nr.length){const r=Math.min(...nr.map(c=>c.r));return{cs:h.filter(c=>c.r===r).slice(0,G.opt.max),eff:{t:'none'}}}
  const two=ok.find(c=>c.r===15);
  return two?{cs:[two],eff:{t:'none'}}:{cs:[ok[0]],eff:botEff(G,i)};
 }
@@ -309,24 +333,35 @@ function botPlay(G,i){
 /* ===== INTERFACE ===== */
 const $=id=>document.getElementById(id),sleep=async ms=>{await new Promise(r=>setTimeout(r,ms));while(paused)await new Promise(r=>rcbs.push(r))};
 const NAMES=['Ada','Rex','Mina','Otto','Juno','Silas','Pia','Dex','Nova','Hugo','Lena','Cass','Remy','Tess','Bo','Ivy','Moe','Zara','Finn','Rosa','Kit','Gus','Wren','Leo'];
-let G=null,P=[],multi=false,OPT={triple:false,jokers:true},lastH=-1,viewer=-1,picking=false,gid=0;const sel=new Set();
+let G=null,P=[],multi=false,OPT={triple:false,jokers:true,decks:1,jpd:2,max:2,th:3,speed:0,tour:0},lastH=-1,viewer=-1,picking=false,gid=0;const sel=new Set();
 const screen=id=>['start','setup','game'].forEach(s=>$(s).hidden=s!==id);
 const say=t=>{const m=$('msg');m.textContent=t;if(!RM&&m.animate)m.animate([{opacity:.2,transform:'translateY(4px)'},{opacity:1,transform:'none'}],{duration:DUR(250)})};
 const log=t=>{const d=document.createElement('div');d.textContent=t;$('log').prepend(d)};
 function flush(){const a=G.q.splice(0);a.forEach(log);if(a.length){say(a.join(' '));const R=[[/\bplays? (?:Joker|[2-9JQKA]|10)/,'play'],[/extra turn|stacked/,'special'],[/\bdraws? (?:\d|a card)/,'draw'],[/flipped/,'flip'],[/blocks? with/,'block'],[/skipped|reversed|lose(?:s)? (?:their|your)/,'skip'],[/finish(?:es)? #/,'finish']];R.filter(([re])=>a.some(t=>re.test(t))).forEach(([,k],n)=>setTimeout(()=>sfx(k),n*170))}}
+const thr=d=>d<=1?3:3+Math.ceil((d-1)*d/6);
 function upd(){
- const k=+$('np').value;$('npo').textContent=k;const hp=$('hp');hp.max=k;if(+hp.value>+hp.max)hp.value=hp.max;$('hpo').textContent=hp.value;
+ const dk=+$('fd').value,mxp=$('fb').checked?20+4*(dk-1):8,np=$('np');np.max=mxp;if(+np.value>mxp)np.value=mxp;
+ const k=+np.value;$('npo').textContent=k;const hp=$('hp');hp.max=Math.min(k,8);if(+hp.value>+hp.max)hp.value=hp.max;$('hpo').textContent=hp.value;
  $('hbox').hidden=!$('mp').checked;const h=$('mp').checked?+hp.value:1;
  $('sum').textContent=h===1?`You and ${k-1} bot${k>2?'s':''}`:`${h} humans and ${k-h} bot${k-h===1?'':'s'}`;
+ $('tbox').hidden=!$('tm').checked;$('tgo').textContent=$('tg').value;
+ $('fdo').textContent=dk;$('fmo').textContent=$('fm').value;$('fjo').textContent=$('fj').value;$('fxo').textContent=$('fx').value;$('fmbox').hidden=!$('fsp').checked;
+ $('fdh').textContent=dk===1?'One deck: 3 matching cards in a row reset the pile.':`${dk} decks: ${thr(dk)} matching cards in a row are needed to reset the pile. It grows faster with every deck.`;
+ $('fbh').textContent=`Allows up to ${20+4*(dk-1)} players at the table: 20, plus 4 for every extra deck.`;
+ const f=[];if(dk>1)f.push(`${dk} decks`);if($('fb').checked)f.push('big game');if($('fsp').checked)f.push(`${$('fm').value}-minute clock`);if(+$('fj').value!==2)f.push(`${$('fj').value} Jokers per deck`);if(+$('fx').value>2)f.push(`up to ${$('fx').value} cards per play`);
+ $('funsum').textContent=f.length?'On: '+f.join(', ')+'.':'Off. Open it for multi-deck games, huge tables and a speed clock.';
 }
-['np','hp','mp'].forEach(i=>$(i).oninput=upd);upd();
+['np','hp','mp','tm','tg','fd','fb','fsp','fm','fj','fx'].forEach(i=>$(i).oninput=upd);upd();
+$('funb').onclick=()=>$('fun').showModal();$('fc').onclick=()=>$('fun').close();$('fun').onclick=e=>{if(e.target===$('fun'))$('fun').close()};
+$('fr').onclick=()=>{$('fd').value=1;$('fb').checked=false;$('fsp').checked=false;$('fm').value=4;$('fj').value=2;$('fx').value=2;upd()};
 $('play').onclick=()=>screen('setup');$('back').onclick=()=>screen('start');
 $('begin').onclick=()=>{
- const n=+$('np').value;multi=$('mp').checked;OPT={triple:$('tr').checked,jokers:$('jk').checked};const h=multi?+$('hp').value:1,pool=NAMES.slice().sort(()=>Math.random()-.5);
- P=Array.from({length:n},(_,i)=>({name:i<h?(multi?'Player '+(i+1):'You'):pool.pop(),bot:i>=h,title:'',prev:''}));
+ const n=+$('np').value;multi=$('mp').checked;const dk=+$('fd').value;OPT={triple:$('tr').checked,jokers:$('jk').checked,decks:dk,jpd:+$('fj').value,max:Math.max($('tr').checked?3:2,+$('fx').value),th:thr(dk),speed:$('fsp').checked?+$('fm').value:0,tour:$('tm').checked?+$('tg').value:0};const h=multi?+$('hp').value:1,pool=NAMES.slice().sort(()=>Math.random()-.5);
+ P=Array.from({length:n},(_,i)=>({name:i<h?(multi?'Player '+(i+1):'You'):(pool.pop()||'Bot '+(i+1)),bot:i>=h,title:'',prev:''}));
+ TS=OPT.tour?{n:OPT.tour,played:0,pts:P.map(()=>0),hist:P.map(()=>[])}:null;
  startGame();
 };
-$('ng').onclick=()=>{if(P.length)startGame()};$('su').onclick=()=>{gid++;stopTimer();setPause(false);screen('setup')};
+$('ng').onclick=()=>{if(P.length)startGame()};$('su').onclick=()=>{gid++;stopSpeed();stopTimer();setPause(false);screen('setup')};
 ['info','rl'].forEach(i=>$(i).onclick=()=>$('rules').showModal());
 $('rc').onclick=()=>$('rules').close();$('rules').onclick=e=>{if(e.target===$('rules'))$('rules').close()};
 
@@ -339,7 +374,7 @@ function render(){
  const ord=['th','st','nd','rd'];
  $('pl').innerHTML=P.map((p,i)=>`<div class="pl ${p.done?'done':''} ${G.turn===i&&!G.over?'turn':''}">${p.prev?`<div class="pt">${p.prev}</div>`:''}<div class="name">${p.name}${G.turn===i&&!G.over?' ◀':''}</div><div class="cnt">${p.done?'Finished #'+(G.order.indexOf(i)+1):p.hand.length+' cards'}</div>${G.first&&G.turn===i?'<div class="tag win">Holds the 3♣</div>':''}${p.skip?'<div class="tag">Skips next turn</div>':''}${p.title?`<div class="tag win">${p.title}</div>`:''}</div>`).join('');
  $('pile').innerHTML=`<div class="dwrap" title="Draw pile"><div class="card ${G.draw.length?'hid':'dark'}"></div>${G.draw.length?`<span class="dn">${G.draw.length}</span>`:''}</div><div class="lp">${G.lp.length?G.lp.map(c=>cardEl(c)).join(''):G.first?'<div class="card ghost c3"><b>3</b><i>♣</i></div>':''}</div>`;
- $('info2').textContent=`${G.dir>0?'Clockwise':'Counter-clockwise'}. `+(G.over?'':G.first?'The 3♣ must open.':G.top===null?'Pile reset: play any card or pair.':`Play ${rn(G.top)} or higher, a 2, or a Joker.`);
+ $('info2').textContent=(TS?`Tournament game ${Math.min(TS.played+1,TS.n)} of ${TS.n}. `:'')+`${G.dir>0?'Clockwise':'Counter-clockwise'}. `+(G.over?'':G.first?'The 3♣ must open.':G.top===null?'Pile reset: play any card or pair.':`Play ${rn(G.top)} or higher, a 2, or a Joker.`);
  const hv=multi?viewer:0;
  $('hl').textContent=hv>=0?(P[hv].name==='You'?'Your hand':`${P[hv].name}'s hand`):'Cards hidden between turns';
  $('hand').innerHTML=hv>=0?fan(P[hv].hand,picking&&pickIdx===hv):'<div class="card hid"></div>';
@@ -366,9 +401,9 @@ async function pickEffect(i){
 async function humanTurn(i){
  const p=P[i];let err='';
  if(multi&&lastH!==i)await choose(`Pass the device to ${p.name}.`,[{label:`I'm ${p.name}: show my cards`}]);
- viewer=i;sel.clear();if(G.first)sel.add(p.hand.find(c=>c.r===3&&c.s==='♣').id);picking=true;pickIdx=i;selMax=G.first?1:(G.opt.triple?3:2);render();sfx('turn');if(!G.first)startTimer();
+ viewer=i;sel.clear();if(G.first)sel.add(p.hand.find(c=>c.r===3&&c.s==='♣').id);picking=true;pickIdx=i;selMax=G.first?1:G.opt.max;render();sfx('turn');if(!G.first)startTimer();
  for(;;){
-  if(await choose((err?err+' ':'')+(G.first?`${multi?p.name+', play':'Play'} your 3♣ to open the game. It is already selected: just press Play selected.`:`${multi?p.name+', select':'Select'} ${G.opt.triple?'one to three':'one or two'} cards.`),[{label:'Play selected',val:1}])===TO)return tmo();
+  if(await choose((err?err+' ':'')+(G.first?`${multi?p.name+', play':'Play'} your 3♣ to open the game. It is already selected: just press Play selected.`:`${multi?p.name+', select':'Select'} ${G.opt.max===2?'one or two':'one to '+G.opt.max} cards.`),[{label:'Play selected',val:1}])===TO)return tmo();
   const cs=p.hand.filter(c=>sel.has(c.id));err=check(G,cs)||'';if(err){sfx('err');continue}
   let eff={t:'none'};
   if(cs[0].r===16){eff=await pickEffect(i);if(eff===TO)return tmo();if(!eff)continue}
@@ -383,8 +418,8 @@ async function humanBlock(i){
  viewer=-1;lastH=-1;return b;
 }
 function startGame(){
- stopTimer();setPause(false);gid++;$('res').innerHTML='';$('log').innerHTML='';$('ctl').innerHTML='';
- P.forEach(p=>p.prev=p.title||'');G=deal(P,OPT);lastH=-1;prevCnt=[];lastKey='';seen.clear();dealAnim=true;viewer=-1;picking=false;sel.clear();
+ stopSpeed();stopTimer();setPause(false);gid++;$('res').innerHTML='';$('log').innerHTML='';$('ctl').innerHTML='';
+ P.forEach(p=>p.prev=p.title||'');G=deal(P,OPT);startSpeed();$('st').hidden=!TS;lastH=-1;prevCnt=[];lastKey='';seen.clear();dealAnim=true;viewer=-1;picking=false;sel.clear();
  screen('game');log(`Cards dealt. ${P[G.turn].name} ${V(P[G.turn],'holds','hold')} the 3♣ and ${V(P[G.turn],'starts','start')}.`);run();
 }
 async function run(){
@@ -405,10 +440,26 @@ async function run(){
   }
   flush();render();await sleep(p.bot?SP(700,250):(G.turn===i?SP(300,120):SP(700,200)));if(my!==gid)return;
  }
- flush();render();
- setTimeout(()=>sfx('over'),600);$('res').innerHTML=G.over==='stale'?'<h3>Draw pile exhausted: everyone is Board.</h3>':`<h3>Final order</h3><ol>${G.order.map(ix=>`<li>${P[ix].title}: ${P[ix].name}</li>`).join('')}</ol>`;
- const nxt=await choose('Game over.',[{label:'Next game',val:1},{label:'Change setup',val:0,alt:1}]);
- if(my!==gid)return;nxt?startGame():screen('setup');
+ await endRun(my);
+}
+async function endRun(my){
+ flush();render();stopSpeed();
+ setTimeout(()=>sfx('over'),600);
+ let html=G.over==='stale'?'<h3>Draw pile exhausted: everyone is Board.</h3>':`<h3>${G.over==='time'?'Time is up! Final order':'Final order'}</h3><ol>${G.order.map(ix=>`<li>${P[ix].title}: ${P[ix].name}</li>`).join('')}</ol>`;
+ let opts=[{label:'Next game',val:1},{label:'Change setup',val:0,alt:1}];
+ if(TS){
+  const gp=P.map(p=>PTS[p.title]);
+  P.forEach((p,i)=>{TS.pts[i]+=gp[i];TS.hist[i].push(gp[i])});TS.played++;
+  html+=`<p>Placement points this game: ${P.map((p,i)=>`${p.name} ${gp[i]>0?'+':''}${gp[i]}`).join(', ')}.</p>`;
+  if(TS.played>=TS.n){html+=standHtml(true);opts=[{label:'New tournament',val:2},{label:'Change setup',val:0,alt:1}];sfx('finish')}
+  else opts[0].label=`Next game (${TS.played+1} of ${TS.n})`;
+  $('st').hidden=false;
+ }
+ $('res').innerHTML=html;
+ const nxt=await choose(TS&&TS.played>=TS.n?'Tournament complete.':'Game over.',opts);
+ if(my!==gid)return;
+ if(nxt===2){TS={n:TS.n,played:0,pts:P.map(()=>0),hist:P.map(()=>[])};startGame()}
+ else nxt?startGame():screen('setup');
 }
 /* hand fan and discard choice */
 let pickIdx=-1,selMax=2;
@@ -459,7 +510,30 @@ function anim(){
  }
  if(old.length===cnt.length&&de())cnt.forEach((n,i)=>{const d=n-old[i];if(d>0&&pb(i))for(let k=0;k<Math.min(d,4);k++)fly(de(),pb(i),k*140)});
 }
+$('fs').onclick=async()=>{sfx('click');const d=document,el=d.documentElement;try{if(d.fullscreenElement||d.webkitFullscreenElement)await(d.exitFullscreen||d.webkitExitFullscreen).call(d);else{const f=el.requestFullscreen||el.webkitRequestFullscreen;if(!f)throw 0;await f.call(el)}}catch(e){say('Full screen is not available in this view. Try opening the game in its own browser tab.')}};
+['fullscreenchange','webkitfullscreenchange'].forEach(ev=>document.addEventListener(ev,()=>$('fs').setAttribute('aria-pressed',String(!!(document.fullscreenElement||document.webkitFullscreenElement)))));
 $('fst').onclick=()=>{fast=!fast;$('fst').setAttribute('aria-pressed',String(fast));$('fst').title=fast?'Fast mode on':'Fast mode off';document.body.classList.toggle('fast',fast)};
+
+/* speed clock and tournament */
+const PTS={'President':5,'Vice President':3,'Board':1,'Vice Asshole':0,'Asshole':-1};
+let TS=null,spLeft=0,spTmr=null;
+function showSp(){const e=$('sp');if(!OPT.speed||!G){e.hidden=true;return}e.hidden=false;e.textContent=`Time left: ${Math.floor(spLeft/60)}:${String(spLeft%60).padStart(2,'0')}`;e.classList.toggle('low',spLeft<=30)}
+function stopSpeed(){clearInterval(spTmr);spTmr=null}
+function startSpeed(){stopSpeed();if(!OPT.speed){showSp();return}spLeft=OPT.speed*60;showSp();spTmr=setInterval(()=>{if(paused||!G||G.over)return;spLeft--;showSp();if(spLeft<=0){stopSpeed();timeUp()}},1000)}
+function timeUp(){
+ if(!G||G.over)return;
+ gid++;stopTimer();picking=false;viewer=-1;sel.clear();curRes=null;$('ctl').innerHTML='';
+ endByTime(G);endRun(gid);
+}
+const ordn=n=>{const o=n%10,t=n%100;return n+((t>10&&t<14)?'th':o===1?'st':o===2?'nd':o===3?'rd':'th')};
+function standRows(){const o=P.map((p,i)=>({i,pts:TS.pts[i]})).sort((a,b)=>b.pts-a.pts||a.i-b.i);let r=0,pv=null,k=0;return o.map(x=>{k++;if(x.pts!==pv){r=k;pv=x.pts}return{...x,rank:r}})}
+function standHtml(final){
+ const rows=standRows(),w=rows.filter(x=>x.rank===1).map(x=>P[x.i].name);
+ const head=final?`<h3>Final tournament standings</h3><p><b>${w.length>1?w.join(' and ')+' tie for first':w[0]+(w[0]==='You'?' win':' wins')+' the tournament'}</b> with ${rows[0].pts} points.</p>`:`<h3>Standings after ${TS.played} of ${TS.n} games</h3>`;
+ return head+`<div class="tw"><table><tr><th>Place</th><th>Player</th><th>Points</th><th>Points per game</th></tr>${rows.map(x=>`<tr><td>${ordn(x.rank)}</td><td>${P[x.i].name}</td><td><b>${x.pts}</b></td><td>${TS.hist[x.i].join(', ')||'-'}</td></tr>`).join('')}</table></div>`;
+}
+$('st').onclick=()=>{if(!TS)return;$('stbody').innerHTML=standHtml(false);$('stand').showModal()};
+$('stc').onclick=()=>$('stand').close();$('stand').onclick=e=>{if(e.target===$('stand'))$('stand').close()};
 
 /* turn timer and pause */
 let paused=false,tmr=null,left=0,curRes=null;const rcbs=[],TO=Symbol('timeout');
@@ -496,7 +570,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&!
 /* school-friendly wording: Asshole <-> Scum */
 let mild=false;
 const SCH='<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M12 1v3" stroke="#fff" stroke-width="1.4"/><path d="M12 1h4v2h-4z" fill="#fff"/><path d="M12 4 2 10h20z" fill="#fff"/><path d="M4 11h16v9H4z" fill="#fff"/><rect x="10" y="14" width="4" height="6" fill="#b3262e"/><rect x="6" y="13" width="2.5" height="2.5" fill="#b3262e"/><rect x="15.5" y="13" width="2.5" height="2.5" fill="#b3262e"/></svg>';
-const sw=(t,to)=>to?t.replace(/Asshole/g,'Scum').replace(/ASSHOLE/g,'SCUM'):t.replace(/Scum/g,'Asshole').replace(/SCUM/g,'ASSHOLE');
+const sw=(t,to)=>to?t.replace(/Asshole/g,'Scum').replace(/ASSHOLE/g,'SCUM').replace(/Speedshole/g,'Speedscum'):t.replace(/Scum/g,'Asshole').replace(/SCUM/g,'ASSHOLE').replace(/Speedscum/g,'Speedshole');
 function fixNode(n,to){if(n.nodeType===3){const u=sw(n.nodeValue,to);if(u!==n.nodeValue)n.nodeValue=u}else{const w=document.createTreeWalker(n,NodeFilter.SHOW_TEXT);let x;while(x=w.nextNode())fixNode(x,to)}}
 new MutationObserver(ms=>{if(!mild)return;ms.forEach(m=>{m.addedNodes.forEach(n=>fixNode(n,true));if(m.type==='characterData')fixNode(m.target,true)})}).observe(document.body,{childList:true,subtree:true,characterData:true});
 document.querySelectorAll('.sch').forEach(b=>{b.innerHTML=SCH;b.onclick=()=>{mild=!mild;document.querySelectorAll('.sch').forEach(x=>x.setAttribute('aria-pressed',String(mild)));fixNode(document.body,mild);document.title=mild?'TGAA SCUM':'TGAA ASSHOLE'}});
