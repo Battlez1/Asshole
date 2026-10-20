@@ -10,10 +10,9 @@
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 <meta name="apple-mobile-web-app-title" content="Nickel Knock">
 
-<!-- Custom Home Screen Logo (replace icon.png with your image filename) -->
+<!-- Custom Home Screen Logo -->
 <link rel="apple-touch-icon" href="AssholeIcon.jpg">
-  
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+
 <title>TGAA ASSHOLE</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600&family=Young+Serif&display=swap">
 <style>
@@ -21,9 +20,24 @@
 box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--page:#0b1110;--ink:#ebe5d4;--muted:#93a09b}}
 :root[data-theme="dark"]{--page:#0b1110;--ink:#ebe5d4;--muted:#93a09b}
-*,*::before,*::after{box-sizing:inherit}
+*,*::before,*::after{box-sizing:inherit;touch-action:manipulation}
 [hidden]{display:none!important}
-body{margin:0;background:var(--page);color:var(--ink);font-family:"DM Sans",system-ui,sans-serif;line-height:1.45}
+body{
+  margin:0;
+  background:var(--page);
+  color:var(--ink);
+  font-family:"DM Sans",system-ui,sans-serif;
+  line-height:1.45;
+
+  /* Enables full scrolling both ways without zooming */
+  overflow: auto;
+  overscroll-behavior: contain;
+
+  /* Prevents text selection and double-tap zoom behavior */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
 main{max-width:980px;margin:0 auto;padding:14px 12px 28px}
 h1{font-family:"Young Serif",Georgia,serif;font-weight:400;font-size:clamp(24px,5vw,34px);margin:2px 0}
 .panel,.table{position:relative;background:radial-gradient(ellipse at center,var(--felt) 0%,var(--felt2) 100%);border:6px solid #2b1d12;border-radius:28px;box-shadow:0 0 0 2px var(--brass) inset;padding:16px 12px;color:var(--ivory)}
