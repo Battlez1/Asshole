@@ -2,13 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="utf-8">
-<!-- Corrected viewport tag for mobile games & edge-to-edge support -->
+<!-- Corrected single viewport tag to prevent double-tap zoom & support edge-to-edge screens -->
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 
 <!-- Enables full-screen standalone app mode on iOS -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Nickel Knock">
+<meta name="apple-mobile-web-app-title" content="TGAA Asshole">
 
 <!-- Custom Home Screen Logo -->
 <link rel="apple-touch-icon" href="AssholeIcon.jpg">
@@ -29,11 +29,11 @@ body{
   font-family:"DM Sans",system-ui,sans-serif;
   line-height:1.45;
 
-  /* Enables full scrolling both ways without zooming */
+  /* Enables full vertical and horizontal scrolling */
   overflow: auto;
   overscroll-behavior: contain;
 
-  /* Prevents text selection and double-tap zoom behavior */
+  /* Prevents accidental text selection and touch callouts */
   -webkit-user-select: none;
   user-select: none;
   -webkit-touch-callout: none;
@@ -133,6 +133,27 @@ dialog .f{margin:10px 0}
 .tw{overflow-x:auto}
 table{border-collapse:collapse;width:100%}
 td,th{padding:4px 8px;text-align:left;border-bottom:1px solid rgba(201,162,75,.3)}
+.stk{font-size:12px;font-weight:700;color:#fff;background:var(--red);border-radius:10px;padding:0 8px;display:inline-block;margin-bottom:3px}
+.lp.many .card+.card{margin-left:-20px}
+.blind{display:inline-block;margin:6px auto 2px;padding:6px 14px;border-radius:12px;color:#fff;font-size:14px;max-width:96%;box-shadow:0 0 0 2px rgba(255,255,255,.35) inset;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.blind s{opacity:.8}
+.bl{margin-top:12px;font-size:14px}.bl summary{cursor:pointer;font-weight:600}
+.bli{padding:2px 0}.bd{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:6px;vertical-align:-1px}
+.card.deb{position:relative;opacity:.8}
+.card.deb::after{content:'';position:absolute;inset:0;border-radius:inherit;background:linear-gradient(to top right,transparent calc(50% - 2px),#e11d2e calc(50% - 2px),#e11d2e calc(50% + 2px),transparent calc(50% + 2px)),linear-gradient(to bottom right,transparent calc(50% - 2px),#e11d2e calc(50% - 2px),#e11d2e calc(50% + 2px),transparent calc(50% + 2px))}
+#timer{cursor:pointer;user-select:none;touch-action:manipulation}
+.simb{position:absolute;right:16px;bottom:50px;z-index:2;width:44px;height:28px;padding:0;min-height:0;border-radius:9px;background:#041c1a;color:#1d5d57;font-size:13px;font-weight:700;letter-spacing:.5px}
+.simb[aria-pressed=true]{color:var(--brass)}
+.cl{color:var(--brass);font-weight:700;margin-left:2px}
+.pl.rb{border-width:3px;animation:rbb 2.4s linear infinite}
+.pl.rb .name{font-weight:700;animation:rbt 2.4s linear infinite}
+@keyframes rbt{0%{color:#ff5a5a}17%{color:#ffa54a}33%{color:#ffe84a}50%{color:#5aff8a}67%{color:#4aa8ff}83%{color:#b45aff}100%{color:#ff5a5a}}
+@keyframes rbb{0%{border-color:#ff5a5a}17%{border-color:#ffa54a}33%{border-color:#ffe84a}50%{border-color:#5aff8a}67%{border-color:#4aa8ff}83%{border-color:#b45aff}100%{border-color:#ff5a5a}}
+@media (prefers-reduced-motion:reduce){.pl.rb,.pl.rb .name{animation:none}.pl.rb{border-color:#ffe84a}.pl.rb .name{color:#ffe84a}}
+#peek{position:fixed;z-index:30;max-width:min(92vw,520px);background:var(--felt2);color:var(--ivory);border:2px solid var(--brass);border-radius:12px;padding:8px 10px;box-shadow:0 6px 20px rgba(0,0,0,.5);font-size:14px;pointer-events:none}
+#peek .pcs{display:flex;flex-wrap:wrap;gap:3px;margin-top:6px}
+#peek .card{width:32px;height:46px;font-size:13px;border-radius:5px}
+.pl[data-i]{cursor:default}
 </style>
 </head>
 <body>
@@ -169,17 +190,17 @@ td,th{padding:4px 8px;text-align:left;border-bottom:1px solid rgba(201,162,75,.3
     <span class="gb"><button class="sch" aria-label="Toggle school-friendly wording (Scum)" aria-pressed="false" title="School-friendly mode"></button><button class="alt sm" id="pb">Pause</button><button class="alt sm" id="snd" aria-label="Mute sound" title="Sound">Sound: on</button><button class="alt sm" id="st" hidden>Standings</button><button class="alt sm" id="rl">Rules</button><button class="alt sm" id="ng">New game</button><button class="alt sm" id="su">Setup</button></span></div>
   <div class="table">
     <div class="tools"><button class="tool" id="fs" aria-label="Full screen" aria-pressed="false" title="Full screen"><svg viewBox="0 0 44 28" width="44" height="28" aria-hidden="true"><rect width="44" height="28" rx="9"/><path class="w fe" d="M13 12V8h4M31 12V8h-4M13 16v4h4M31 16v4h-4"/><path class="w fx" d="M17 8v4h-4M27 8v4h4M17 20v-4h-4M27 20v-4h4"/></svg></button><button class="tool" id="fst" aria-label="Fast mode" aria-pressed="false" title="Fast mode off"><svg viewBox="0 0 44 28" width="44" height="28" aria-hidden="true"><rect width="44" height="28" rx="9"/><path d="M12 8l9 6-9 6zM22 8l9 6-9 6z"/></svg></button></div>
-    <div class="players" id="pl"></div>
-    <div class="mid"><div class="info2" id="info2"></div><div class="pile" id="pile"></div><div class="msg" id="msg" aria-live="polite"></div><div class="timer" id="timer" role="timer" hidden></div></div>
+    <button class="simb" id="sim" aria-pressed="false" title="Simulate this game" hidden>SIM</button><div class="players" id="pl"></div>
+    <div class="mid"><div class="info2" id="info2"></div><div class="blind" id="blind" hidden></div><div class="pile" id="pile"></div><div class="msg" id="msg" aria-live="polite"></div><div class="timer" id="timer" role="button" tabindex="0" title="Double-tap to skip your turn (Floor Violation)" aria-label="Turn timer. Double-tap to skip your turn and take a Floor Violation" hidden></div></div>
     <div class="hl" id="hl"></div><div class="hand" id="hand"></div>
     <div class="ctl" id="ctl"></div>
     <div class="mark" aria-hidden="true"><b>TGAA</b><span>Tabletop Game Association of America</span></div>
   </div>
-  <div id="res"></div>
+  <details class="bl" id="bl" open hidden><summary>All Boss Blinds</summary><div id="bll"></div></details><div id="res"></div>
   <div id="log" aria-label="Game log"></div>
 </section>
 
-<div class="pz" id="pz" role="dialog" aria-label="Game paused" hidden><h2>Paused</h2><div class="ctl" style="margin:0"><button id="rs">Resume</button><button class="alt" id="pq">Change setup</button></div></div>
+<div id="peek" hidden></div><div class="pz" id="pz" role="dialog" aria-label="Game paused" hidden><h2>Paused</h2><div class="ctl" style="margin:0"><button id="rs">Resume</button><button class="alt" id="pq">Change setup</button></div></div>
 <dialog id="fun" aria-labelledby="ft">
   <h2 id="ft">Fun mode</h2>
   <p>Extra options that are silly or too unbalanced for a real game. All are off by default.</p>
@@ -189,6 +210,9 @@ td,th{padding:4px 8px;text-align:left;border-bottom:1px solid rgba(201,162,75,.3
   <div class="f" id="fmbox" hidden><label for="fm">Time limit <output id="fmo">4</output> minutes</label><input type="range" id="fm" min="1" max="10" value="4"><p class="hint">3 to 5 minutes works well.</p></div>
   <div class="f"><label for="fj">Jokers per deck <output id="fjo">2</output></label><input type="range" id="fj" min="1" max="10" value="2"><p class="hint">Only used when Jokers are on.</p></div>
   <div class="f"><label for="fx">Most cards in one play <output id="fxo">2</output></label><input type="range" id="fx" min="2" max="8" value="2"><p class="hint">Jokers always go one at a time. The triple stack option makes this at least 3.</p></div>
+  <div class="f"><label class="chk"><input type="checkbox" id="fcc" autocomplete="off"> Colorful Cards</label><p class="hint">Every card gets a random color. Suits do not matter in this game.</p></div>
+  <div class="f"><label class="chk"><input type="checkbox" id="fcm" autocomplete="off"> Cuck Mode</label><p class="hint">Removes the human player: every seat is a bot and the game plays itself. A SIM button simulates the current game instantly.</p></div>
+  <div class="f"><label class="chk"><input type="checkbox" id="fbb" autocomplete="off"> Boss Blinds</label><p class="hint">Each time play returns to the starting player, a random Boss Blind changes the rules for that round. Jokers gain a Disable Boss Blind effect.</p></div>
   <div class="ctl"><button class="alt" id="fr">Reset all</button><button id="fc">Done</button></div>
 </dialog>
 <dialog id="stand" aria-labelledby="stt"><h2 id="stt">Tournament standings</h2><div id="stbody"></div><div class="ctl"><button id="stc">Close</button></div></dialog>
@@ -210,6 +234,10 @@ td,th{padding:4px 8px;text-align:left;border-bottom:1px solid rgba(201,162,75,.3
   <p>Optional extras that are silly or unbalanced: several decks (a longer stack of matching cards is needed to reset the pile), huge tables, Speedshole with a game clock, extra Jokers, and bigger plays.</p>
   <h3>Turn timer</h3>
   <p>You have 30 seconds on each of your turns. If time runs out it is a Floor Violation and your turn is skipped. The opening 3♣ play has no timer.</p>
+  <h3>Three strikes</h3>
+  <p>Every Floor Violation (running out of time, or double-tapping the timer to skip your turn) is a strike. A strike count shows above a player's name once they have one. Three strikes and you are out of the game and finish last, as the Asshole. In a tournament, strikes carry over for the whole tournament, and reaching three strikes also costs 3 points in the standings.</p>
+  <h3>Tournament standings</h3>
+  <p>Letters next to a name: z = clinched the tournament win, y = clinched not finishing last, e = clinched last place. Tied players play one more game of Asshole against each other to settle it.</p>
   <h3>Jokers</h3>
   <p>A Joker goes on anything, alone, resets the pile, and gives another turn. Choose one effect or none: Skip, Reverse (both unavailable with two players left), Draw 2 for any target, Draw 4 for the next player only (who also loses their turn), or Discard 2 for a target. Only one Joker can be played per turn, including the extra turns that a Joker, 2 or triple stack earns. A targeted player holding a Joker may block a Draw 2 or Draw 4 with a Draw Pass: neither player plays on those Jokers and play moves to the next player.</p>
   <div class="ctl"><button id="rc">Got it</button></div>
@@ -219,19 +247,66 @@ td,th{padding:4px 8px;text-align:left;border-bottom:1px solid rgba(201,162,75,.3
 /* ===== GAME ENGINE (no DOM access) ===== */
 const RN={11:'J',12:'Q',13:'K',14:'A',15:'2',16:'Joker'},rn=r=>RN[r]||r,SU='♠♥♦♣';
 let cid=0;
-const mkDeck=o=>{const d=[];for(let k=0;k<o.decks;k++){for(const s of SU)for(let r=3;r<=15;r++)d.push({r,s,id:cid++});if(o.jokers)for(let i=0;i<o.jpd;i++)d.push({r:16,s:'★',id:cid++})}return d};
+const mkDeck=o=>{const d=[],cl=()=>o.cc?`hsl(${Math.random()*360|0} 80% 38%)`:null;for(let k=0;k<o.decks;k++){for(const s of SU)for(let r=3;r<=15;r++)d.push({r,s,id:cid++,col:cl()});if(o.jokers)for(let i=0;i<o.jpd;i++)d.push({r:16,s:'★',id:cid++,col:cl()})}return d};
 const shuf=a=>{for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
 const cn=c=>c.r===16?'Joker':rn(c.r)+c.s;
 const TT=n=>n===2?['President','Asshole']:n===3?['President','Vice President','Asshole']:['President','Vice President',...Array(n-4).fill('Board'),'Vice Asshole','Asshole'];
 const alive=G=>G.P.filter(p=>!p.done).length;
+const BL=[
+{id:'small',name:'Small Blind',desc:'Normal play, no changes. Lasts one trip around the starting player.',col:'#2b6fd6'},
+{id:'big',name:'Big Blind',desc:'Normal play, no changes. Lasts one trip around the starting player.',col:'#e8851c'},
+{id:'club',name:'The Club',desc:'All Club cards are debuffed.',col:'#2b5f9e'},
+{id:'goad',name:'The Goad',desc:'All Spade cards are debuffed.',col:'#8a5a2b'},
+{id:'window',name:'The Window',desc:'All Diamond cards are debuffed.',col:'#a8801a'},
+{id:'head',name:'The Head',desc:'All Heart cards are debuffed.',col:'#d4577a'},
+{id:'plant',name:'The Plant',desc:'All face cards (J, Q, K) are debuffed.',col:'#4f8a8b'},
+{id:'needle',name:'The Needle',desc:'Only one card can be played at a time.',col:'#808080'},
+{id:'jester',name:'The Jester',desc:'All Jokers are debuffed.',col:'#d9822b'},
+{id:'eye',name:'The Eye',desc:'All cards of a random rank (not Joker) are debuffed.',col:'#b05a3c'},
+{id:'serpent',name:'The Serpent',desc:'Draw a card from the discard pile for each card you play, so your card count never changes.',col:'#3d4f5c'},
+{id:'leaf',name:'Verdant Leaf',desc:'Only 1.5 seconds to play your cards. Only appears when 2 players remain and both hold 4 or fewer cards.',col:'#2fa84f'},
+{id:'heart',name:'Crimson Heart',desc:'One random card in each hand is debuffed. Only appears when 2 players remain and both hold 4 or fewer cards.',col:'#dc143c'},
+{id:'vessel',name:'Violet Vessel',desc:'You automatically draw one card when it is your turn. Only appears when 2 players remain and both hold 4 or fewer cards.',col:'#7b3fe4'}
+];
+const bon=(G,id)=>!!(G.opt.boss&&G.blind&&G.blind.id===id&&!G.blindOff);
+function deb(G,i,c){if(G.first||!G.opt.boss||!G.blind||G.blindOff)return false;const b=G.blind;switch(b.id){case'club':return c.s==='♣';case'goad':return c.s==='♠';case'window':return c.s==='♦';case'head':return c.s==='♥';case'plant':return c.r>=11&&c.r<=13;case'jester':return c.r===16;case'eye':return c.r===b.rank;case'heart':return G.hc[i]===c.id}return false}
+function loopEnd(G){
+ if(!G.opt.boss||G.over)return;
+ G.lc++;
+ if(G.lc>=((G.blind.id==='small'||G.blind.id==='big')?1:2))rollBlind(G);
+}
+function rollBlind(G){
+ if(!G.opt.boss||G.over)return;
+ let b;
+ if(G.blind.id==='small')b={...BL[1]};
+ else{
+  const al=G.P.filter(x=>!x.done),two=al.length===2&&al.every(x=>x.hand.length<=4),F3=['leaf','heart','vessel'],pool=BL.slice(2).filter(x=>two?F3.includes(x.id):!F3.includes(x.id));
+  b={...pool[Math.random()*pool.length|0]};
+  if(b.id==='eye'){b.rank=3+(Math.random()*13|0);b.desc=`All ${rn(b.rank)}s are debuffed.`}
+ }
+ G.blind=b;G.blindOff=false;G.hc={};G.lc=0;G.q.push(`${b.id==='big'?'Big Blind':'Boss Blind: '+b.name}. ${b.desc}`);
+}
+function turnStart(G){
+ if(!G.opt.boss||G.over)return false;
+ const i=G.turn,p=G.P[i];
+ if(bon(G,'heart')&&p.hand.length&&!p.hand.some(c=>c.id===G.hc[i]))G.hc[i]=p.hand[Math.random()*p.hand.length|0].id;
+ if(bon(G,'vessel')&&!G.first){const g=drawN(G,i,1);if(g){G.q.push(`${p.name} ${V(p,'draws','draw')} a card (Violet Vessel).`);return true}}
+ return false;
+}
+function conclude(G){
+ G.P.forEach((p,i)=>{if(!p.done)G.order.push(i)});
+ G.out.slice().reverse().forEach(i=>G.order.push(i));
+ G.over='done';G.order.forEach((ix,k)=>G.P[ix].title=TT(G.n)[k]);
+}
 const V=(p,a,b)=>p.name==='You'?b:a;
 const nx=(G,i)=>{let j=i;do j=(j+G.dir+G.n)%G.n;while(G.P[j].done&&j!==i);return j};
 function deal(P,opt){
  const d=shuf(mkDeck(opt)),n=P.length,s=Math.random()*n|0;
- P.forEach(p=>{p.hand=[];p.done=false;p.skip=false;p.title=''});
+ P.forEach(p=>{p.hand=[];p.done=false;p.out=false;p.skip=false;p.title=''});
  d.forEach((c,k)=>P[(s+k)%n].hand.push(c));
  P.forEach(p=>p.hand.sort((a,b)=>a.r-b.r||SU.indexOf(a.s)-SU.indexOf(b.s)));
- return{P,n,turn:P.findIndex(p=>p.hand.some(c=>c.r===3&&c.s==='♣')),dir:1,top:null,run:{r:0,c:0},used:[],draw:[],hasDraw:false,last:-1,passes:0,skipN:0,order:[],first:true,over:null,pend:null,q:[],lp:[],opt,lastJ:-1,src:-1,disc:null,vio:0};
+ const t0=P.findIndex(p=>p.hand.some(c=>c.r===3&&c.s==='♣'));
+ return{P,n,turn:t0,startP:t0,blind:BL[0],lc:0,blindOff:false,hc:{},stack:[],out:[],dir:1,top:null,run:{r:0,c:0},used:[],draw:[],hasDraw:false,last:-1,passes:0,skipN:0,order:[],first:true,over:null,pend:null,q:[],lp:[],opt,lastJ:-1,src:-1,disc:null,vio:0};
 }
 function check(G,cs){
  const mx=G.opt.max;
@@ -239,6 +314,8 @@ function check(G,cs){
  if(cs.length>1&&cs.some(c=>c.r===16))return'A Joker must be played alone.';
  if(cs[0].r===16&&G.lastJ===G.turn)return'Only one Joker can be played per turn.';
  if(cs.some(c=>c.r!==cs[0].r))return'All selected cards must have the same rank.';
+ if(bon(G,'needle')&&cs.length>1)return'The Needle: only one card can be played at a time.';
+ if(cs.some(c=>deb(G,G.turn,c)))return'That card is debuffed by the current Boss Blind.';
  if(G.first)return(cs.length===1&&cs[0].r===3&&cs[0].s==='♣')?null:'The opening play must be the 3♣ alone.';
  const r=cs[0].r;if(r>=15||G.top===null)return null;
  return r>=G.top?null:`${rn(r)} is too low. Play ${rn(G.top)} or higher, a 2, or a Joker.`;
@@ -252,25 +329,30 @@ function stale(G){G.over='stale';G.P.forEach(p=>p.title='Board');G.q.push('The d
 function finish(G,i){
  const p=G.P[i];p.done=true;G.order.push(i);G.q.push(`${p.name} ${V(p,'is','are')} out of cards and ${V(p,'finishes','finish')} #${G.order.length}!`);
  const a=G.P.filter(x=>!x.done);
- if(a.length===1){G.order.push(G.P.indexOf(a[0]));G.over='done';G.order.forEach((ix,k)=>G.P[ix].title=TT(G.n)[k]);G.q.push(`${a[0].name} ${V(a[0],'is','are')} the last player left.`)}
+ if(a.length<=1){if(a[0])G.q.push(`${a[0].name} ${V(a[0],'is','are')} the last player left.`);conclude(G)}
 }
 function flip(G){
  makeDraw(G);rebuild(G);if(!G.draw.length){stale(G);return}
- const c=G.draw.pop();G.used.push(c);G.lp=[c];G.passes=0;G.run={r:0,c:0};G.top=c.r>=15?null:c.r;G.lastJ=-1;G.src=-1;
+ const c=G.draw.pop();G.used.push(c);G.lp=[c];G.stack=[c];G.passes=0;G.run={r:0,c:0};G.top=c.r>=15?null:c.r;G.lastJ=-1;G.src=-1;
  G.q.push(`Everyone drew, so ${cn(c)} is flipped from the draw pile${c.r>=15?' (no effect, play anything)':''}.`);
 }
 function advance(G){
  if(G.over)return;
- G.lastJ=-1;let j=G.turn,wrap=false;
- const st=()=>{do{j=(j+G.dir+G.n)%G.n;if(j===G.last&&G.passes>0)wrap=true}while(G.P[j].done)};
+ G.lastJ=-1;let j=G.turn,wrap=false,nb=0;
+ const st=()=>{do{j=(j+G.dir+G.n)%G.n;if(j===G.last&&G.passes>0)wrap=true;if(j===G.startP)nb++}while(G.P[j].done)};
  st();
  while(G.skipN>0){G.skipN--;G.q.push(`${G.P[j].name} ${V(G.P[j],'is','are')} skipped.`);st()}
  while(G.P[j].skip){G.P[j].skip=false;G.q.push(`${G.P[j].name} ${V(G.P[j],'loses their','lose your')} turn (Draw 4).`);st()}
- G.turn=j;if(wrap){if(G.vio){G.vio=0;G.passes=0}else flip(G)}
+ G.turn=j;if(wrap){if(G.vio){G.vio=0;G.passes=0}else flip(G)}while(nb-->0)loopEnd(G);
 }
 function extra(G,i){G.turn=i;if(G.P[i].done)advance(G)}
 function pass(G){const i=G.turn;makeDraw(G);G.q.push(`${G.P[i].name} cannot play and ${V(G.P[i],'draws','draw')} a card.`);if(drawN(G,i,1)===0){stale(G);return}G.passes++;advance(G)}
-function violate(G){const i=G.turn,p=G.P[i];G.q.push(`Floor Violation! ${p.name} ran out of time and ${V(p,'loses','lose')} ${V(p,'their','your')} turn.`);G.vio=1;advance(G)}
+function violate(G,skip){
+ const i=G.turn,p=G.P[i];p.strikes=(p.strikes||0)+1;
+ G.q.push(`Floor Violation! ${p.name} ${skip?V(p,'skips','skip')+' the turn':V(p,'runs','run')+' out of time'} and ${V(p,'loses','lose')} ${V(p,'their','your')} turn. Strike ${p.strikes} of 3.`);
+ if(p.strikes===3)(G.pen=G.pen||[]).push(i);if(p.strikes>=3){p.done=true;p.out=true;G.out.push(i);G.used.unshift(...p.hand);p.hand=[];G.q.push(`${p.name} ${V(p,'has','have')} three strikes and ${V(p,'is','are')} out! ${V(p,'They become','You become')} the Asshole.`);if(G.P.filter(x=>!x.done).length<=1){conclude(G);return}}
+ G.vio=1;advance(G);
+}
 function discard(G,cs){
  const{from,to}=G.disc;G.disc=null;const T=G.P[to];
  T.hand=T.hand.filter(c=>!cs.includes(c));G.used.unshift(...cs);
@@ -287,18 +369,20 @@ function play(G,i,cs,eff){
  G.used.push(...cs);G.lp=cs;G.last=i;G.passes=0;G.vio=0;if(r===16)G.lastJ=i;G.src=i;
  G.q.push(`${p.name} ${V(p,'plays','play')} ${cs.map(cn).join(' ')}.`);
  let sp=1,op=0;
- if(G.first){G.first=false;op=1;G.q.push('The 3♣ opens the game: extra turn, play anything.')}
- else if(r===15)G.q.push('A 2 resets the pile: extra turn.');
- else if(r===16)G.q.push('Joker: pile reset and extra turn.');
- else{G.run=(G.run.r===r&&G.run.c>0&&(G.top===r||G.top===null))?{r,c:G.run.c+cs.length}:{r,c:cs.length};G.top=r;sp=G.run.c>=G.opt.th?1:0;if(sp)G.q.push(`${G.opt.th===3?'Three':G.opt.th} ${rn(r)}s stacked: pile reset, extra turn.`)}
+ if(G.first){G.first=false;op=1;G.stack=[...cs];G.q.push('The 3♣ opens the game: extra turn, play anything.')}
+ else if(r===15){G.stack=[...cs];G.q.push('A 2 resets the pile: extra turn.')}
+ else if(r===16){G.stack=[...cs];G.q.push('Joker: pile reset and extra turn.')}
+ else{const cont=G.run.r===r&&G.run.c>0&&(G.top===r||G.top===null);G.stack=cont?[...G.stack,...cs]:[...cs];G.run=cont?{r,c:G.run.c+cs.length}:{r,c:cs.length};G.top=r;sp=G.run.c>=G.opt.th?1:0;if(sp)G.q.push(`${G.opt.th===3?'Three':G.opt.th} ${rn(r)}s stacked: pile reset, extra turn.`)}
  if(sp){G.top=null;G.run=op?{r:3,c:1}:{r:0,c:0}}
+ if(bon(G,'serpent')){const pool=G.used.filter(c=>!G.stack.includes(c));let g=0;for(let k=0;k<cs.length&&pool.length;k++){const c=pool.splice(Math.random()*pool.length|0,1)[0];G.used.splice(G.used.indexOf(c),1);p.hand.push(c);g++}if(g){p.hand.sort((a,b)=>a.r-b.r||SU.indexOf(a.s)-SU.indexOf(b.s));G.q.push(`The Serpent: ${p.name} ${V(p,'draws','draw')} ${g} card${g===1?'':'s'} from the discard pile.`)}}
  if(!p.hand.length)finish(G,i);
  if(r===16&&!G.over){
   const t=eff.t,tg=t==='d4'?nx(G,i):eff.target,T=G.P[tg],many=alive(G)>2;
-  if(t==='rev'&&many){G.dir*=-1;G.q.push('Play direction reversed.')}
+  if(t==='dis'&&G.opt.boss){G.blindOff=true;G.q.push(`The Joker disables ${G.blind.name} until the next blind.`)}
+  else if(t==='rev'&&many){G.dir*=-1;G.q.push('Play direction reversed.')}
   else if(t==='skip'&&many){G.skipN++;G.q.push('The next player will be skipped.')}
   else if((t==='d2'||t==='d4')&&T&&!T.done){
-   if(T.hand.some(c=>c.r===16)){G.pend={from:i,to:tg,t};return null}
+   if(T.hand.some(c=>c.r===16&&!deb(G,tg,c))){G.pend={from:i,to:tg,t};return null}
    applyDraw(G,tg,t);
   }else if(t==='x2'&&T&&!T.done){
    G.disc={from:i,to:tg};G.q.push(`${T.name} must discard ${Math.min(2,T.hand.length)} card${T.hand.length===1?'':'s'}.`);return null;
@@ -312,7 +396,7 @@ function play(G,i,cs,eff){
 function resolve(G,blk){
  const{from,to,t}=G.pend;G.pend=null;const T=G.P[to];
  if(!blk){applyDraw(G,to,t);extra(G,from);return}
- const j=T.hand.find(c=>c.r===16);T.hand.splice(T.hand.indexOf(j),1);G.used.push(j);G.lp=[j];
+ const j=T.hand.find(c=>c.r===16&&!deb(G,to,c));T.hand.splice(T.hand.indexOf(j),1);G.used.push(j);G.lp=[j];G.stack=[j];
  G.top=null;G.run={r:0,c:0};G.last=to;G.passes=0;G.lastJ=-1;G.src=to;G.vio=0;
  G.q.push(`${T.name} ${V(T,'blocks','block')} with a Joker (Draw Pass). Nobody plays on these Jokers; play moves on.`);
  if(!T.hand.length)finish(G,to);
@@ -322,7 +406,7 @@ function resolve(G,blk){
 
 function endByTime(G){
  const rest=G.P.map((p,i)=>i).filter(i=>!G.P[i].done).sort((a,b)=>G.P[a].hand.length-G.P[b].hand.length);
- rest.forEach(i=>G.order.push(i));G.over='time';
+ rest.forEach(i=>G.order.push(i));G.out.slice().reverse().forEach(i=>G.order.push(i));G.over='time';
  G.order.forEach((ix,k)=>G.P[ix].title=TT(G.n)[k]);
  G.q.push('Time is up! Finished players keep their places and everyone else is ranked by fewest cards left.');
 }
@@ -330,6 +414,7 @@ function endByTime(G){
 /* ===== BOTS ===== */
 function botEff(G,i){
  const al=G.P.map((p,k)=>k).filter(k=>k!==i&&!G.P[k].done),many=alive(G)>2,x=Math.random();
+ if(G.opt.boss&&G.blind.id!=='small'&&G.blind.id!=='big'&&!G.blindOff&&Math.random()<.3)return{t:'dis'};
  const lead=al.slice().sort((a,b)=>G.P[a].hand.length-G.P[b].hand.length)[0];
  // making other players draw is the strongest Joker play, so bots do it about 80% of the time
  if(x<.4)return{t:'d2',target:lead};if(x<.8)return{t:'d4'};
@@ -339,15 +424,15 @@ function botPlay(G,i){
  const h=G.P[i].hand;
  if(G.first)return{cs:[h.find(c=>c.r===3&&c.s==='♣')],eff:{t:'none'}};
  const ok=h.filter(c=>!check(G,[c])),nr=ok.filter(c=>c.r<15);
- if(nr.length){const r=Math.min(...nr.map(c=>c.r));return{cs:h.filter(c=>c.r===r).slice(0,G.opt.max),eff:{t:'none'}}}
+ if(nr.length){const r=Math.min(...nr.map(c=>c.r));return{cs:h.filter(c=>c.r===r&&!deb(G,i,c)).slice(0,bon(G,'needle')?1:G.opt.max),eff:{t:'none'}}}
  const two=ok.find(c=>c.r===15);
  return two?{cs:[two],eff:{t:'none'}}:{cs:[ok[0]],eff:botEff(G,i)};
 }
 
 /* ===== INTERFACE ===== */
-const $=id=>document.getElementById(id),sleep=async ms=>{await new Promise(r=>setTimeout(r,ms));while(paused)await new Promise(r=>rcbs.push(r))};
-const NAMES=['Ada','Rex','Mina','Otto','Juno','Silas','Pia','Dex','Nova','Hugo','Lena','Cass','Remy','Tess','Bo','Ivy','Moe','Zara','Finn','Rosa','Kit','Gus','Wren','Leo'];
-let G=null,P=[],multi=false,OPT={triple:false,jokers:true,decks:1,jpd:2,max:2,th:3,speed:0,tour:0},lastH=-1,viewer=-1,picking=false,gid=0;const sel=new Set();
+const $=id=>document.getElementById(id),simGo=()=>simOn&&G&&!G.over&&G.P.every(p=>p.done||p.bot),sleep=async ms=>{const t0=Date.now();while(Date.now()-t0<ms&&!simGo())await new Promise(r=>setTimeout(r,Math.min(60,ms)));while(paused)await new Promise(r=>rcbs.push(r))};
+const NAMES=['Robert','Jackson','Grayson','Otto','Owen','Colin','Matthew','Santy','Jonathan','Hugo','Doc','Sidney','Kenny','Tess','Jasmyn','Ivy','Moe','Orsucci','Finn','Rosa','John Dalton','Gus','Wren','Leo'];
+let G=null,P=[],ALL=[],TB=false,FIN=false,simOn=false,multi=false,OPT={triple:false,jokers:true,decks:1,jpd:2,max:2,th:3,speed:0,tour:0,cc:false,spec:false,boss:false},lastH=-1,viewer=-1,picking=false,gid=0;const sel=new Set();
 const screen=id=>['start','setup','game'].forEach(s=>$(s).hidden=s!==id);
 const say=t=>{const m=$('msg');m.textContent=t;if(!RM&&m.animate)m.animate([{opacity:.2,transform:'translateY(4px)'},{opacity:1,transform:'none'}],{duration:DUR(250)})};
 const log=t=>{const d=document.createElement('div');d.textContent=t;$('log').prepend(d)};
@@ -358,44 +443,49 @@ function upd(){
  const k=+np.value;$('npo').textContent=k;const hp=$('hp');hp.max=Math.min(k,8);if(+hp.value>+hp.max)hp.value=hp.max;$('hpo').textContent=hp.value;
  $('hbox').hidden=!$('mp').checked;const h=$('mp').checked?+hp.value:1;
  $('sum').textContent=h===1?`You and ${k-1} bot${k>2?'s':''}`:`${h} humans and ${k-h} bot${k-h===1?'':'s'}`;
+ if($('fcm').checked)$('sum').textContent=`Cuck Mode: all ${k} players are bots.`;
  $('tbox').hidden=!$('tm').checked;$('tgo').textContent=$('tg').value;
  $('fdo').textContent=dk;$('fmo').textContent=$('fm').value;$('fjo').textContent=$('fj').value;$('fxo').textContent=$('fx').value;$('fmbox').hidden=!$('fsp').checked;
  $('fdh').textContent=dk===1?'One deck: 3 matching cards in a row reset the pile.':`${dk} decks: ${thr(dk)} matching cards in a row are needed to reset the pile. It grows faster with every deck.`;
  $('fbh').textContent=`Allows up to ${20+4*(dk-1)} players at the table: 20, plus 4 for every extra deck.`;
- const f=[];if(dk>1)f.push(`${dk} decks`);if($('fb').checked)f.push('big game');if($('fsp').checked)f.push(`${$('fm').value}-minute clock`);if(+$('fj').value!==2)f.push(`${$('fj').value} Jokers per deck`);if(+$('fx').value>2)f.push(`up to ${$('fx').value} cards per play`);
+ const f=[];if(dk>1)f.push(`${dk} decks`);if($('fb').checked)f.push('big game');if($('fsp').checked)f.push(`${$('fm').value}-minute clock`);if(+$('fj').value!==2)f.push(`${$('fj').value} Jokers per deck`);if(+$('fx').value>2)f.push(`up to ${$('fx').value} cards per play`);if($('fcc').checked)f.push('Colorful Cards');if($('fcm').checked)f.push('Cuck Mode');if($('fbb').checked)f.push('Boss Blinds');
  $('funsum').textContent=f.length?'On: '+f.join(', ')+'.':'Off. Open it for multi-deck games, huge tables and a speed clock.';
 }
-['np','hp','mp','tm','tg','fd','fb','fsp','fm','fj','fx'].forEach(i=>$(i).oninput=upd);upd();
+['np','hp','mp','tm','tg','fd','fb','fsp','fm','fj','fx','fcc','fcm','fbb'].forEach(i=>$(i).oninput=upd);upd();
 $('funb').onclick=()=>$('fun').showModal();$('fc').onclick=()=>$('fun').close();$('fun').onclick=e=>{if(e.target===$('fun'))$('fun').close()};
-$('fr').onclick=()=>{$('fd').value=1;$('fb').checked=false;$('fsp').checked=false;$('fm').value=4;$('fj').value=2;$('fx').value=2;upd()};
+$('fr').onclick=()=>{$('fd').value=1;$('fb').checked=false;$('fsp').checked=false;$('fm').value=4;$('fj').value=2;$('fx').value=2;$('fcc').checked=false;$('fcm').checked=false;$('fbb').checked=false;upd()};
+$('bll').innerHTML=BL.map(b=>`<div class="bli"><span class="bd" style="background:${b.col}"></span><b>${b.name}</b>: ${b.desc}</div>`).join('');
 $('play').onclick=()=>screen('setup');$('back').onclick=()=>screen('start');
 $('begin').onclick=()=>{
- const n=+$('np').value;multi=$('mp').checked;const dk=+$('fd').value;OPT={triple:$('tr').checked,jokers:$('jk').checked,decks:dk,jpd:+$('fj').value,max:Math.max($('tr').checked?3:2,+$('fx').value),th:thr(dk),speed:$('fsp').checked?+$('fm').value:0,tour:$('tm').checked?+$('tg').value:0};const h=multi?+$('hp').value:1,pool=NAMES.slice().sort(()=>Math.random()-.5);
- P=Array.from({length:n},(_,i)=>({name:i<h?(multi?'Player '+(i+1):'You'):(pool.pop()||'Bot '+(i+1)),bot:i>=h,title:'',prev:''}));
- TS=OPT.tour?{n:OPT.tour,played:0,pts:P.map(()=>0),hist:P.map(()=>[])}:null;
+ const n=+$('np').value;const spec=$('fcm').checked;multi=$('mp').checked&&!spec;const dk=+$('fd').value;OPT={triple:$('tr').checked,jokers:$('jk').checked,decks:dk,jpd:+$('fj').value,max:Math.max($('tr').checked?3:2,+$('fx').value),th:thr(dk),speed:$('fsp').checked?+$('fm').value:0,tour:$('tm').checked?+$('tg').value:0,cc:$('fcc').checked,spec,boss:$('fbb').checked};const h=spec?0:multi?+$('hp').value:1,pool=NAMES.slice().sort(()=>Math.random()-.5);
+ P=ALL=Array.from({length:n},(_,i)=>({id:i,name:i<h?(multi?'Player '+(i+1):'You'):(pool.pop()||'Bot '+(i+1)),bot:i>=h,title:'',prev:'',strikes:0}));
+ TS=OPT.tour?newTS(OPT.tour):null;simOn=false;TB=false;FIN=false;
  startGame();
 };
-$('ng').onclick=()=>{if(P.length)startGame()};$('su').onclick=()=>{gid++;stopSpeed();stopTimer();setPause(false);screen('setup')};
+$('ng').onclick=()=>{if(P.length)startGame()};$('su').onclick=()=>{TB=false;FIN=false;gid++;stopSpeed();stopTimer();setPause(false);screen('setup')};
 ['info','rl'].forEach(i=>$(i).onclick=()=>$('rules').showModal());
 $('rc').onclick=()=>$('rules').close();$('rules').onclick=e=>{if(e.target===$('rules'))$('rules').close()};
 
-function cardEl(c,btn){
- const cls=`card ${c.r===16?'jk':(c.s==='♥'||c.s==='♦')?'red':''} ${G&&G.first&&c.r===3&&c.s==='♣'?'key':''} ${c.r===3&&c.s==='♣'?'c3':''}`,inner=c.r===16?'<b>JKR</b><i>★</i>':`<b>${rn(c.r)}</b><i>${c.s}</i>`;
- return btn?`<button class="${cls} ${sel.has(c.id)?'sel':''}" data-id="${c.id}" aria-label="${cn(c)}">${inner}</button>`:`<div class="${cls}">${inner}</div>`;
+function cardEl(c,btn,extra,fx){
+ const db=!!(btn&&G&&!G.disc&&G.turn===pickIdx&&deb(G,pickIdx,c)),col=c.col&&!(c.r===3&&c.s==='♣')?`color:${c.col};`:'',st=(fx||col)?` style="${fx||''}${col}"`:'';
+ const cls=`card ${c.r===16?'jk':(c.s==='♥'||c.s==='♦')?'red':''} ${G&&G.first&&c.r===3&&c.s==='♣'?'key':''} ${c.r===3&&c.s==='♣'?'c3':''} ${db?'deb':''} ${extra||''}`,inner=c.r===16?'<b>JKR</b><i>★</i>':`<b>${rn(c.r)}</b><i>${c.s}</i>`;
+ return btn?`<button class="${cls} ${sel.has(c.id)?'sel':''}"${st} data-id="${c.id}" aria-label="${cn(c)}${db?' (debuffed)':''}">${inner}</button>`:`<div class="${cls}"${st}>${inner}</div>`;
 }
 function render(){
  if(!G)return;
+ if(FIN&&TS){finalBoxes();return}
  const ord=['th','st','nd','rd'];
- $('pl').innerHTML=P.map((p,i)=>`<div class="pl ${p.done?'done':''} ${G.turn===i&&!G.over?'turn':''}">${p.prev?`<div class="pt">${p.prev}</div>`:''}<div class="name">${p.name}${G.turn===i&&!G.over?' ◀':''}</div><div class="cnt">${p.done?'Finished #'+(G.order.indexOf(i)+1):p.hand.length+' cards'}</div>${G.first&&G.turn===i?'<div class="tag win">Holds the 3♣</div>':''}${p.skip?'<div class="tag">Skips next turn</div>':''}${p.title?`<div class="tag win">${p.title}</div>`:''}</div>`).join('');
- $('pile').innerHTML=`<div class="dwrap" title="Draw pile"><div class="card ${G.draw.length?'hid':'dark'}"></div>${G.draw.length?`<span class="dn">${G.draw.length}</span>`:''}</div><div class="lp">${G.lp.length?G.lp.map(c=>cardEl(c)).join(''):G.first?'<div class="card ghost c3"><b>3</b><i>♣</i></div>':''}</div>`;
- $('info2').textContent=(TS?`Tournament game ${Math.min(TS.played+1,TS.n)} of ${TS.n}. `:'')+`${G.dir>0?'Clockwise':'Counter-clockwise'}. `+(G.over?'':G.first?'The 3♣ must open.':G.top===null?'Pile reset: play any card or pair.':`Play ${rn(G.top)} or higher, a 2, or a Joker.`);
- const hv=multi?viewer:0;
- $('hl').textContent=hv>=0?(P[hv].name==='You'?'Your hand':`${P[hv].name}'s hand`):'Cards hidden between turns';
- $('hand').innerHTML=hv>=0?fan(P[hv].hand,picking&&pickIdx===hv):'<div class="card hid"></div>';
+ $('pl').innerHTML=P.map((p,i)=>`<div class="pl ${p.done?'done':''} ${G.turn===i&&!G.over?'turn':''}" data-i="${i}">${p.strikes?`<div class="stk">Strike${p.strikes>1?'s':''}: ${p.strikes}/3</div>`:''}${p.prev?`<div class="pt">${p.prev}</div>`:''}<div class="name">${p.name}${G.turn===i&&!G.over?' ◀':''}</div><div class="cnt">${p.out?'Struck out':p.done?'Finished #'+(G.order.indexOf(i)+1):p.hand.length+' cards'}</div>${G.first&&G.turn===i?'<div class="tag win">Holds the 3♣</div>':''}${p.skip?'<div class="tag">Skips next turn</div>':''}${p.title?`<div class="tag win">${p.title}</div>`:''}</div>`).join('');
+ $('pile').innerHTML=`<div class="dwrap" title="Draw pile"><div class="card ${G.draw.length?'hid':'dark'}"></div>${G.draw.length?`<span class="dn">${G.draw.length}</span>`:''}</div><div class="lp${G.stack.length>4?' many':''}">${G.stack.length?G.stack.map(c=>cardEl(c,false,G.lp.includes(c)?'nw':'')).join(''):G.first?'<div class="card ghost c3"><b>3</b><i>♣</i></div>':''}</div>`;
+ $('info2').textContent=(TB?'Tiebreaker game between the tied players. ':TS?`Tournament game ${Math.min(TS.played+1,TS.n)} of ${TS.n}. `:'')+`${G.dir>0?'Clockwise':'Counter-clockwise'}. `+(G.over?'':G.first?'The 3♣ must open.':G.top===null?'Pile reset: play any card or pair.':`Play ${rn(G.top)} or higher, a 2, or a Joker.`);
+ const hv=OPT.spec?-1:multi?viewer:0;
+ $('hl').textContent=hv>=0?(P[hv].name==='You'?'Your hand':`${P[hv].name}'s hand`):OPT.spec?'Spectating: every player is a bot':'Cards hidden between turns';
+ $('hand').innerHTML=hv>=0?fan(P[hv].hand,picking&&pickIdx===hv):OPT.spec?'':'<div class="card hid"></div>';
+ $('sim').hidden=!(!G.over&&G.P.every(p=>p.done||p.bot));if(peekI>=0)peekDraw();boss();
  anim();
 }
 $('hand').onclick=e=>{
- const b=e.target.closest('[data-id]');if(!b||!picking)return;const id=+b.dataset.id;if(G.first){say('The opening play must be the 3♣ alone. It is already selected: just press Play selected.');return}sfx('tick');
+ const b=e.target.closest('[data-id]');if(!b||!picking)return;const id=+b.dataset.id;if(b.classList.contains('deb')){say('That card is debuffed by the Boss Blind and cannot be played.');sfx('err');return}if(G.first){say('The opening play must be the 3♣ alone. It is already selected: just press Play selected.');return}sfx('tick');
  if(sel.has(id))sel.delete(id);else if(sel.size>=selMax){say(`You can select at most ${selMax} card${selMax===1?'':'s'}.`);return}else sel.add(id);render();
 };
 function choose(msg,opts){
@@ -404,7 +494,7 @@ function choose(msg,opts){
 }
 async function pickEffect(i){
  const two=alive(G)<=2,why='Unavailable with only two players left';
- const t=await choose('Joker: choose an effect.',[{label:'No effect',val:'none'},{label:'Skip next player',val:'skip',dis:two,why},{label:'Reverse direction',val:'rev',dis:two,why},{label:'Draw 2 (target)',val:'d2'},{label:'Draw 4 (next player)',val:'d4'},{label:'Discard 2 (target)',val:'x2'},{label:'Back',val:null,alt:1}]);
+ const t=await choose('Joker: choose an effect.',[{label:'No effect',val:'none'},{label:'Skip next player',val:'skip',dis:two,why},{label:'Reverse direction',val:'rev',dis:two,why},{label:'Draw 2 (target)',val:'d2'},{label:'Draw 4 (next player)',val:'d4'},{label:'Discard 2 (target)',val:'x2'},...(OPT.boss&&G.blind.id!=='small'&&G.blind.id!=='big'&&!G.blindOff?[{label:'Disable Boss Blind',val:'dis'}]:[]),{label:'Back',val:null,alt:1}]);
  if(t===TO)return TO;if(!t)return null;
  if(t==='d2'||t==='x2'){
   const tg=await choose('Choose a target.',[...P.map((p,k)=>({label:p.name,val:k,dis:p.done})).filter(o=>o.val!==i),{label:'Back',val:-1,alt:1}]);
@@ -415,7 +505,7 @@ async function pickEffect(i){
 async function humanTurn(i){
  const p=P[i];let err='';
  if(multi&&lastH!==i)await choose(`Pass the device to ${p.name}.`,[{label:`I'm ${p.name}: show my cards`}]);
- viewer=i;sel.clear();if(G.first)sel.add(p.hand.find(c=>c.r===3&&c.s==='♣').id);picking=true;pickIdx=i;selMax=G.first?1:G.opt.max;render();sfx('turn');if(!G.first)startTimer();
+ viewer=i;sel.clear();if(G.first)sel.add(p.hand.find(c=>c.r===3&&c.s==='♣').id);picking=true;pickIdx=i;selMax=G.first?1:bon(G,'needle')?1:G.opt.max;render();sfx('turn');if(!G.first)startTimer();
  for(;;){
   if(await choose((err?err+' ':'')+(G.first?`${multi?p.name+', play':'Play'} your 3♣ to open the game. It is already selected: just press Play selected.`:`${multi?p.name+', select':'Select'} ${G.opt.max===2?'one or two':'one to '+G.opt.max} cards.`),[{label:'Play selected',val:1}])===TO)return tmo();
   const cs=p.hand.filter(c=>sel.has(c.id));err=check(G,cs)||'';if(err){sfx('err');continue}
@@ -433,18 +523,20 @@ async function humanBlock(i){
 }
 function startGame(){
  stopSpeed();stopTimer();setPause(false);gid++;$('res').innerHTML='';$('log').innerHTML='';$('ctl').innerHTML='';
- P.forEach(p=>p.prev=p.title||'');G=deal(P,OPT);startSpeed();$('st').hidden=!TS;lastH=-1;prevCnt=[];lastKey='';seen.clear();dealAnim=true;viewer=-1;picking=false;sel.clear();
+ if(!TS)P.forEach(p=>p.strikes=0);P.forEach(p=>p.prev=p.title||'');FIN=false;simOn=false;G=deal(P,OPT);startSpeed();$('st').hidden=!TS;lastH=-1;prevCnt=[];lastKey='';seen.clear();dealAnim=true;viewer=-1;picking=false;sel.clear();
  screen('game');log(`Cards dealt. ${P[G.turn].name} ${V(P[G.turn],'holds','hold')} the 3♣ and ${V(P[G.turn],'starts','start')}.`);run();
 }
 async function run(){
  const my=gid;
  while(!G.over){
+  if(simGo()){simAll();simOn=false;const a=G.q.splice(0);a.slice(-120).forEach(log);say('Game simulated.');break}
   flush();render();
   const i=G.turn,p=P[i];
+  if(turnStart(G)){flush();render();await sleep(SP(900,300));if(my!==gid)return}
   if(!canPlay(G,i)){lastH=-1;say(`${p.name} cannot play and ${V(p,'draws','draw')} a card.`);await sleep(SP(1500,400));if(my!==gid)return;pass(G);flush();render();await sleep(SP(700,250));if(my!==gid)return;continue}
   let r;
   if(p.bot){lastH=-1;say(`${p.name} is thinking...`);await sleep(SP(2300,450));if(my!==gid)return;r=botPlay(G,i)}
-  else{r=await humanTurn(i);if(my!==gid)return;if(r===TO){violate(G);flush();render();sfx('err');await sleep(SP(1400,700));if(my!==gid)return;continue}}
+  else{r=await humanTurn(i);if(my!==gid)return;if(r===TO){violate(G,dtap);dtap=false;flush();render();sfx('err');await sleep(SP(1400,700));if(my!==gid)return;continue}}
   play(G,i,r.cs,r.eff);
   if(G.disc){flush();render();await sleep(SP(900,300));if(my!==gid)return;const T=P[G.disc.to],need=Math.min(2,T.hand.length),dc=T.bot?T.hand.slice().sort((a,b)=>a.r-b.r).slice(0,need):await humanDiscard(G.disc.to,need);if(my!==gid)return;discard(G,dc)}
   if(G.pend){
@@ -459,20 +551,35 @@ async function run(){
 async function endRun(my){
  flush();render();stopSpeed();
  setTimeout(()=>sfx('over'),600);
- let html=G.over==='stale'?'<h3>Draw pile exhausted: everyone is Board.</h3>':`<h3>${G.over==='time'?'Time is up! Final order':'Final order'}</h3><ol>${G.order.map(ix=>`<li>${P[ix].title}: ${P[ix].name}</li>`).join('')}</ol>`;
- let opts=[{label:'Next game',val:1},{label:'Change setup',val:0,alt:1}];
+ let html=G.over==='stale'?'<h3>Draw pile exhausted: everyone is Board.</h3>':`<h3>${G.over==='time'?'Time is up! Final order':'Final order'}</h3><ol>${G.order.map(ix=>`<li>${P[ix].title}: ${P[ix].name}${P[ix].out?' (struck out)':''}</li>`).join('')}</ol>`;
+ let opts=[{label:'Next game',val:1},{label:'Change setup',val:0,alt:1}],msg='Game over.';
+ const fin=()=>{html+=standHtml(true);FIN=true;P=ALL;opts=[{label:'View final standings',val:4},{label:'New tournament',val:2},{label:'Change setup',val:0,alt:1}];msg='Tournament complete.';sfx('finish')};
  if(TS){
-  const gp=P.map(p=>PTS[p.title]);
-  P.forEach((p,i)=>{TS.pts[i]+=gp[i];TS.hist[i].push(gp[i])});TS.played++;
-  html+=`<p>Placement points this game: ${P.map((p,i)=>`${p.name} ${gp[i]>0?'+':''}${gp[i]}`).join(', ')}.</p>`;
-  if(TS.played>=TS.n){html+=standHtml(true);opts=[{label:'New tournament',val:2},{label:'Change setup',val:0,alt:1}];sfx('finish')}
-  else opts[0].label=`Next game (${TS.played+1} of ${TS.n})`;
+  if(TB){
+   const ord=G.order.map(ix=>P[ix].id);ord.forEach((id,k)=>TS.tb[id]=k);TB=false;P=ALL;
+   html+=`<p>Tiebreaker result: ${ord.map(id=>ALL[id].name).join(', ')}.</p>`;
+   if(TS.q.length)opts=[{label:`Next tiebreaker (${TS.q[0].length} players)`,val:3},{label:'Change setup',val:0,alt:1}];else fin();
+  }else{
+   const gp=P.map((p,i)=>PTS[p.title]-(G.pen&&G.pen.includes(i)?3:0));
+   P.forEach((p,i)=>{TS.pts[i]+=gp[i];TS.hist[i].push(gp[i])});TS.played++;
+   html+=`<p>Placement points this game${G.pen&&G.pen.length?' (includes a 3 point penalty for three strikes)':''}: ${P.map((p,i)=>`${p.name} ${gp[i]>0?'+':''}${gp[i]}`).join(', ')}.</p>`;
+   if(TS.played>=TS.n){
+    TS.q=tieGroups();
+    if(TS.q.length){html+=`<p>There is a tie after ${TS.n} games. The tied players play one more game of Asshole against each other to settle it.</p>`;opts=[{label:`Play tiebreaker (${TS.q[0].length} players)`,val:3},{label:'Change setup',val:0,alt:1}];msg='Tie to break.'}
+    else fin();
+   }else opts[0].label=`Next game (${TS.played+1} of ${TS.n})`;
+  }
   $('st').hidden=false;
  }
- $('res').innerHTML=html;
- const nxt=await choose(TS&&TS.played>=TS.n?'Tournament complete.':'Game over.',opts);
- if(my!==gid)return;
- if(nxt===2){TS={n:TS.n,played:0,pts:P.map(()=>0),hist:P.map(()=>[])};startGame()}
+ $('res').innerHTML=html;if(FIN)finalBoxes();
+ let nxt;
+ for(;;){
+  nxt=await choose(msg,opts);if(my!==gid)return;
+  if(nxt===4){$('stbody').innerHTML=standHtml(true);$('stand').showModal();continue}
+  break;
+ }
+ if(nxt===2){TS=newTS(TS.n);ALL.forEach(p=>p.strikes=0);P=ALL;startGame()}
+ else if(nxt===3){const g=TS.q.shift();TB=true;P=g.map(id=>ALL[id]);startGame()}
  else nxt?startGame():screen('setup');
 }
 /* hand fan and discard choice */
@@ -483,7 +590,7 @@ function fan(h,btn){
  let html='';
  for(let r=0;r<rows;r++){
   const row=h.slice(r*m,(r+1)*m),n=row.length,step=n>1?Math.min(stepMax,(w-cw)/(n-1)):0,half=(n-1)/2||1;
-  html+=`<div class="hrow" style="--ov:${(step-cw).toFixed(1)}px">`+row.map((c,k)=>{const u=(k-(n-1)/2)/half;return cardEl(c,btn).replace('class="card',`style="--r:${(u*Math.min(12,n*1.6)).toFixed(1)}deg;--y:${(u*u*14).toFixed(1)}px" class="card`)}).join('')+'</div>';
+  html+=`<div class="hrow" style="--ov:${(step-cw).toFixed(1)}px">`+row.map((c,k)=>{const u=(k-(n-1)/2)/half;return cardEl(c,btn,'',`--r:${(u*Math.min(12,n*1.6)).toFixed(1)}deg;--y:${(u*u*14).toFixed(1)}px;`)}).join('')+'</div>';
  }
  return html;
 }
@@ -510,7 +617,7 @@ function fly(a,b,delay){
  d.animate([{transform:'none',opacity:1},{transform:`translate(${t.left+t.width/2-r.left-r.width/2}px,${t.top+t.height/2-r.top-r.height/2}px) scale(.6)`,opacity:.15}],{duration:DUR(520),delay:DUR(delay),easing:'ease-in',fill:'both'}).onfinish=()=>d.remove();
 }
 function anim(){
- const cnt=P.map(p=>p.hand.length),key=G.lp.map(c=>c.id).join(),fresh=key!==lastKey,hv=multi?viewer:0,old=prevCnt,wasDeal=dealAnim;
+ const cnt=P.map(p=>p.hand.length),key=G.lp.map(c=>c.id).join(),fresh=key!==lastKey,hv=OPT.spec?-1:multi?viewer:0,old=prevCnt,wasDeal=dealAnim;
  prevCnt=cnt;lastKey=key;dealAnim=false;
  const hh=hv>=0?P[hv].hand:[],ids=hh.map(c=>hv+':'+c.id),nw=ids.map(x=>!seen.has(x));ids.forEach(x=>seen.add(x));
  if(RM||!document.body.animate)return;
@@ -519,7 +626,7 @@ function anim(){
  document.querySelectorAll('#hand .card').forEach((el,k)=>{if(nw[k])A(el,[{opacity:0,translate:wasDeal?'0 -30px':'0 0',scale:wasDeal?.7:.5},{opacity:1,translate:'0 0',scale:1}],350,wasDeal?k*60:0)});
  if(fresh&&G.lp.length){
   const src=G.src>=0?pb(G.src):de();
-  if(src)[...document.querySelectorAll('.lp .card')].forEach((el,k)=>{const a=src.getBoundingClientRect(),b=el.getBoundingClientRect();A(el,[{transform:`translate(${a.left+a.width/2-b.left-b.width/2}px,${a.top+a.height/2-b.top-b.height/2}px) scale(.5) rotate(-12deg)`,opacity:.2},{transform:'none',opacity:1}],480,k*110)});
+  if(src)[...document.querySelectorAll('.lp .card.nw')].forEach((el,k)=>{const a=src.getBoundingClientRect(),b=el.getBoundingClientRect();A(el,[{transform:`translate(${a.left+a.width/2-b.left-b.width/2}px,${a.top+a.height/2-b.top-b.height/2}px) scale(.5) rotate(-12deg)`,opacity:.2},{transform:'none',opacity:1}],480,k*110)});
   if(G.top===null&&!G.first&&G.src!==-1)A(document.querySelector('.lp'),[{boxShadow:'0 0 0 0 rgba(201,162,75,.95)'},{boxShadow:'0 0 0 22px rgba(201,162,75,0)'}],700,300);
  }
  if(old.length===cnt.length&&de())cnt.forEach((n,i)=>{const d=n-old[i];if(d>0&&pb(i))for(let k=0;k<Math.min(d,4);k++)fly(de(),pb(i),k*140)});
@@ -540,12 +647,61 @@ function timeUp(){
  endByTime(G);endRun(gid);
 }
 const ordn=n=>{const o=n%10,t=n%100;return n+((t>10&&t<14)?'th':o===1?'st':o===2?'nd':o===3?'rd':'th')};
-function standRows(){const o=P.map((p,i)=>({i,pts:TS.pts[i]})).sort((a,b)=>b.pts-a.pts||a.i-b.i);let r=0,pv=null,k=0;return o.map(x=>{k++;if(x.pts!==pv){r=k;pv=x.pts}return{...x,rank:r}})}
-function standHtml(final){
- const rows=standRows(),w=rows.filter(x=>x.rank===1).map(x=>P[x.i].name);
- const head=final?`<h3>Final tournament standings</h3><p><b>${w.length>1?w.join(' and ')+' tie for first':w[0]+(w[0]==='You'?' win':' wins')+' the tournament'}</b> with ${rows[0].pts} points.</p>`:`<h3>Standings after ${TS.played} of ${TS.n} games</h3>`;
- return head+`<div class="tw"><table><tr><th>Place</th><th>Player</th><th>Points</th><th>Points per game</th></tr>${rows.map(x=>`<tr><td>${ordn(x.rank)}</td><td>${P[x.i].name}</td><td><b>${x.pts}</b></td><td>${TS.hist[x.i].join(', ')||'-'}</td></tr>`).join('')}</table></div>`;
+const newTS=n=>({n,played:0,pts:ALL.map(()=>0),hist:ALL.map(()=>[]),tb:{},q:[]});
+function standRows(){const o=ALL.map((p,i)=>({i,pts:TS.pts[i],tb:TS.tb[i]??0})).sort((a,b)=>b.pts-a.pts||a.tb-b.tb||a.i-b.i);let r=0,pk=null,k=0;return o.map(x=>{k++;const key=x.pts+':'+x.tb;if(key!==pk){r=k;pk=key}return{...x,rank:r}})}
+/* clinch letters: z = clinched win, e = clinched last, y = cannot finish last. R games left; one game pays 5 at best and -1 at worst. */
+function clinch(i){
+ const R=TS.n-TS.played,n=ALL.length,pts=TS.pts,o=pts.map((v,j)=>j).filter(j=>j!==i);
+ if(!o.length)return'';
+ const pen=k=>ALL[k].strikes<3?3:0;if(o.every(j=>pts[i]-R-pen(i)>pts[j]+5*R))return'z';
+ if(o.every(j=>pts[j]-R-pen(j)>pts[i]+5*R))return'e';
+ /* worst case for i: Asshole every game (-1). Can the others still all catch up to i, sharing each game's points? */
+ const vs=TT(n).map(t=>PTS[t]).sort((a,b)=>b-a).slice(0,-1),need=o.map(j=>Math.max(0,pts[i]-R-pen(i)-pts[j])).sort((a,b)=>b-a);
+ let s=0,v=0;for(let k=0;k<need.length;k++){s+=need[k];v+=vs[k];if(s>R*v)return'y'}
+ return'';
 }
+function tieGroups(){const m={};ALL.forEach((p,i)=>(m[TS.pts[i]]=m[TS.pts[i]]||[]).push(i));return Object.keys(m).map(Number).sort((a,b)=>b-a).map(k=>m[k]).filter(g=>g.length>1)}
+function standHtml(final){
+ const rows=standRows(),w=rows.filter(x=>x.rank===1).map(x=>ALL[x.i].name);
+ const head=final?`<h3>Final tournament standings</h3><p><b>${w.length>1?w.join(' and ')+' tie for first':w[0]+(w[0]==='You'?' win':' wins')+' the tournament'}</b> with ${rows[0].pts} points.</p>`:`<h3>Standings after ${TS.played} of ${TS.n} games</h3>`;
+ return head+`<div class="tw"><table><tr><th>Place</th><th>Player</th><th>Points</th><th>Points per game</th></tr>${rows.map(x=>{const p=ALL[x.i],l=clinch(x.i);return `<tr><td>${ordn(x.rank)}</td><td>${p.bot?p.name:`<b>${p.name}</b>`}${l?` <span class="cl">${l}</span>`:''}</td><td><b>${x.pts}</b></td><td>${TS.hist[x.i].join(', ')||'-'}</td></tr>`}).join('')}</table></div><p class="hint"><b class="cl">z</b> clinched the tournament win &middot; <b class="cl">y</b> clinched not finishing last &middot; <b class="cl">e</b> clinched last place (cannot win)</p>`;
+}
+function finalBoxes(){const rows=standRows(),w=new Set(rows.filter(x=>x.rank===1).map(x=>x.i));$('pl').innerHTML=rows.map(x=>`<div class="pl ${w.has(x.i)?'rb':''}"><div class="pt">${ordn(x.rank)} place</div><div class="name">${ALL[x.i].name}</div><div class="cnt">${TS.pts[x.i]} points</div></div>`).join('');$('hand').innerHTML='';$('hl').textContent='';$('blind').hidden=true;$('sim').hidden=true}
+function boss(){
+ const b=$('blind');$('bl').hidden=!OPT.boss;$('sim').setAttribute('aria-pressed',String(simOn));
+ if(!OPT.boss||!G.blind){b.hidden=true;return}
+ const x=G.blind;b.hidden=false;b.style.background=x.col;b.innerHTML=`<b>${x.name}</b>: ${G.blindOff?`<s>${x.desc}</s> Disabled by a Joker until the next blind.`:x.desc}`;
+}
+function simAll(){
+ let n=0;
+ while(!G.over&&n++<60000){
+  turnStart(G);if(G.over)break;
+  const i=G.turn;if(!canPlay(G,i)){pass(G);continue}
+  const r=botPlay(G,i);play(G,i,r.cs,r.eff);
+  if(G.disc){const T=P[G.disc.to];discard(G,T.hand.slice().sort((a,b)=>a.r-b.r).slice(0,Math.min(2,T.hand.length)))}
+  if(G.pend)resolve(G,Math.random()<(G.pend.t==='d4'?1:.7));
+ }
+ if(!G.over)stale(G);
+}
+$('sim').onclick=()=>{simOn=true};
+const peekEl=$('peek');let peekI=-1,lastPT='mouse';
+const peekOK=()=>!!G&&(OPT.spec||(!multi&&P[0]&&!P[0].bot&&P[0].done));
+const peekHide=()=>{peekI=-1;peekEl.hidden=true};
+function peekDraw(el){
+ if(peekI<0||!peekOK()||!P[peekI]){peekHide();return}
+ const p=P[peekI],h=p.hand;
+ peekEl.innerHTML=`<b>${p.name}</b> (${h.length} card${h.length===1?'':'s'})<div class="pcs">${h.length?h.map(c=>cardEl(c)).join(''):'No cards'}</div>`;
+ peekEl.hidden=false;
+ const box=el||$('pl').children[peekI];if(!box)return;
+ const r=box.getBoundingClientRect(),w=peekEl.offsetWidth,hh=peekEl.offsetHeight;
+ peekEl.style.left=Math.max(6,Math.min(innerWidth-w-6,r.left+r.width/2-w/2))+'px';
+ peekEl.style.top=Math.max(6,Math.min(innerHeight-hh-6,r.bottom+6))+'px';
+}
+$('pl').addEventListener('pointerdown',e=>{lastPT=e.pointerType});
+$('pl').addEventListener('pointerover',e=>{if(e.pointerType!=='mouse'||!peekOK())return;const b=e.target.closest('.pl');if(b&&b.dataset.i!==undefined){peekI=+b.dataset.i;peekDraw(b)}});
+$('pl').addEventListener('pointerout',e=>{if(e.pointerType!=='mouse')return;const b=e.target.closest('.pl');if(b&&!(e.relatedTarget&&b.contains(e.relatedTarget)))peekHide()});
+$('pl').addEventListener('click',e=>{if(lastPT==='mouse'||!peekOK())return;const b=e.target.closest('.pl');if(!b||b.dataset.i===undefined)return;const i=+b.dataset.i;e.stopPropagation();if(peekI===i)peekHide();else{peekI=i;peekDraw(b)}});
+document.addEventListener('click',()=>{if(lastPT!=='mouse')peekHide()});
 $('st').onclick=()=>{if(!TS)return;$('stbody').innerHTML=standHtml(false);$('stand').showModal()};
 $('stc').onclick=()=>$('stand').close();$('stand').onclick=e=>{if(e.target===$('stand'))$('stand').close()};
 
@@ -553,8 +709,12 @@ $('stc').onclick=()=>$('stand').close();$('stand').onclick=e=>{if(e.target===$('
 let paused=false,tmr=null,left=0,curRes=null;const rcbs=[],TO=Symbol('timeout');
 function showT(){const t=$('timer');t.hidden=false;t.textContent=`Time left: ${left}s`;t.classList.toggle('low',left<=10)}
 function stopTimer(){clearInterval(tmr);tmr=null;$('timer').hidden=true}
-function startTimer(){clearInterval(tmr);left=30;showT();tmr=setInterval(()=>{if(paused)return;left--;if(left<=5&&left>0)sfx('tick');if(left>0){showT();return}stopTimer();if(curRes){const r=curRes;curRes=null;$('ctl').innerHTML='';r(TO)}},1000)}
+function startTimer(){clearInterval(tmr);const lf=bon(G,'leaf');left=lf?1.5:30;showT();tmr=setInterval(()=>{if(paused)return;left=lf?Math.round((left-.1)*10)/10:left-1;if(!lf&&left<=5&&left>0)sfx('tick');if(left>0){showT();return}stopTimer();if(curRes){const r=curRes;curRes=null;$('ctl').innerHTML='';r(TO)}},lf?100:1000)}
 const tmo=()=>{stopTimer();picking=false;viewer=-1;sel.clear();lastH=-1;return TO};
+let dtap=false,lastTap=0;
+function skipNow(){if(!curRes||paused||tmr===null)return;dtap=true;left=0;const r=curRes;curRes=null;stopTimer();$('ctl').innerHTML='';r(TO)}
+$('timer').addEventListener('pointerup',()=>{const t=Date.now();if(t-lastTap<400){lastTap=0;skipNow()}else lastTap=t});
+$('timer').addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();const t=Date.now();if(t-lastTap<600){lastTap=0;skipNow()}else lastTap=t}});
 function setPause(v){paused=v;$('pz').hidden=!v;$('game').inert=v;$('pb').textContent=v?'Resume':'Pause';if(v)$('rs').focus();else rcbs.splice(0).forEach(f=>f())}
 $('pb').onclick=()=>setPause(!paused);$('rs').onclick=()=>setPause(false);$('pq').onclick=()=>$('su').click();
 
@@ -584,7 +744,7 @@ document.addEventListener('click',e=>{const b=e.target.closest('button');if(b&&!
 /* school-friendly wording: Asshole <-> Scum */
 let mild=false;
 const SCH='<svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M12 1v3" stroke="#fff" stroke-width="1.4"/><path d="M12 1h4v2h-4z" fill="#fff"/><path d="M12 4 2 10h20z" fill="#fff"/><path d="M4 11h16v9H4z" fill="#fff"/><rect x="10" y="14" width="4" height="6" fill="#b3262e"/><rect x="6" y="13" width="2.5" height="2.5" fill="#b3262e"/><rect x="15.5" y="13" width="2.5" height="2.5" fill="#b3262e"/></svg>';
-const sw=(t,to)=>to?t.replace(/Asshole/g,'Scum').replace(/ASSHOLE/g,'SCUM').replace(/Speedshole/g,'Speedscum'):t.replace(/Scum/g,'Asshole').replace(/SCUM/g,'ASSHOLE').replace(/Speedscum/g,'Speedshole');
+const sw=(t,to)=>to?t.replace(/Asshole/g,'Scum').replace(/ASSHOLE/g,'SCUM').replace(/Speedshole/g,'Speedscum').replace(/Cuck Mode/g,'Spectator Mode'):t.replace(/Scum/g,'Asshole').replace(/SCUM/g,'ASSHOLE').replace(/Speedscum/g,'Speedshole').replace(/Spectator Mode/g,'Cuck Mode');
 function fixNode(n,to){if(n.nodeType===3){const u=sw(n.nodeValue,to);if(u!==n.nodeValue)n.nodeValue=u}else{const w=document.createTreeWalker(n,NodeFilter.SHOW_TEXT);let x;while(x=w.nextNode())fixNode(x,to)}}
 new MutationObserver(ms=>{if(!mild)return;ms.forEach(m=>{m.addedNodes.forEach(n=>fixNode(n,true));if(m.type==='characterData')fixNode(m.target,true)})}).observe(document.body,{childList:true,subtree:true,characterData:true});
 document.querySelectorAll('.sch').forEach(b=>{b.innerHTML=SCH;b.onclick=()=>{mild=!mild;document.querySelectorAll('.sch').forEach(x=>x.setAttribute('aria-pressed',String(mild)));fixNode(document.body,mild);document.title=mild?'TGAA SCUM':'TGAA ASSHOLE'}});
